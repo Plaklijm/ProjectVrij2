@@ -7,14 +7,14 @@
 #include "Logging/LogMacros.h"
 #include "HorrorTemplateCharacter.generated.h"
 
+class UPlayerDataAsset;
+class UInteractComponent;
 class UTimelineComponent;
 class USpringArmComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCharacterMovementComponent;
 class UCameraComponent;
-class UInputAction;
-class UInputMappingContext;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -34,41 +34,24 @@ class AHorrorTemplateCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UInteractComponent* InteractComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Settings, meta=(AllowPrivateAccess = "true"))
+	UPlayerDataAsset* PlayerData;
 	
 	UPROPERTY(VisibleAnywhere)
 	UCharacterMovementComponent* CMC;
-
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
-
-	/** Move Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SprintAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* CrouchAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
-	float WalkSpeed;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
-	float SprintSpeed;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
-	float CrouchSpeed;
 
 	UPROPERTY(VisibleAnywhere, Category=Movement)
 	float PlayerHeight;
 	
 	UPROPERTY(VisibleAnywhere, Category=Movement)
 	float CrouchHeight;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
-	UCurveFloat* CrouchCurve;
+
+	UPROPERTY(VisibleAnywhere, Category=Movement)
+	bool IsCrouching;
 	
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CrouchTimeLine;
@@ -80,10 +63,7 @@ protected:
 	virtual void BeginPlay();
 
 public:
-		
-	/** Look Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* LookAction;
+
 	
 protected:
 	/** Called for movement input */
@@ -92,6 +72,7 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void CrouchLogic();
 	void StartCrouching();
 	void StopCrouching();
 	
@@ -99,10 +80,10 @@ protected:
 	void StopSprinting();
 
 	UFUNCTION()
-	void TimeLineProgress(float Value);
+	void TimeLineProgress(float Value) const;
 
 	UFUNCTION()
-	void TimeLineFinished();
+	void TimeLineFinished() const;
 	
 protected:
 	// APawn interface

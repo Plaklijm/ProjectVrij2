@@ -12,6 +12,8 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Public/InteractComponent.h"
+#include "Public/PlayerDataAsset.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -36,7 +38,11 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	FirstPersonCameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 
+	// Create CrouchTimelineComponent
 	CrouchTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("CrouchTimeLine"));
+
+	// Create InteractComponent
+	InteractComponent = CreateDefaultSubobject<UInteractComponent>(TEXT("InteractComponent"));
 	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
@@ -55,16 +61,18 @@ void AHorrorTemplateCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+	if (!IsValid(PlayerData)) return;
+
 	// Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
-			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+			Subsystem->AddMappingContext(PlayerData->DefaultMappingContext, 0);
 		}
 	}
 
-	CMC->MaxWalkSpeed = WalkSpeed;
+	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -73,11 +81,11 @@ void AHorrorTemplateCharacter::BeginPlay()
 	TimeLineFinishedEvent.BindUFunction(this, FName("TimeLineFinished"));
 
 	PlayerHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-	CrouchHeight = CMC->CrouchedHalfHeight;
+	CrouchHeight = CMC->GetCrouchedHalfHeight();
 
-	if (CrouchCurve)
+	if (PlayerData->CrouchCurve)
 	{
-		CrouchTimeLine->AddInterpFloat(CrouchCurve, CrouchValue);
+		CrouchTimeLine->AddInterpFloat(PlayerData->CrouchCurve, CrouchValue);
 	}
 
 	CrouchTimeLine->SetTimelineFinishedFunc(TimeLineFinishedEvent);
@@ -91,18 +99,20 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::StartSprinting);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopSprinting);
+		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::StartSprinting);
+		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopSprinting);
 
 		// Crouching
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::StartCrouching);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopCrouching);
+		EnhancedInputComponent->BindAction(PlayerData->CrouchAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::CrouchLogic);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::Move);
+		EnhancedInputComponent->BindAction(PlayerData->MoveAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::Move);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::Look);
+		EnhancedInputComponent->BindAction(PlayerData->LookAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::Look);
+
+		// Interact
+		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Started, InteractComponent, &UInteractComponent::Cast);
 	}
 	else
 	{
@@ -137,25 +147,35 @@ void AHorrorTemplateCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AHorrorTemplateCharacter::CrouchLogic()
+{
+	if (!IsCrouching)
+		StartCrouching();
+	else
+		StopCrouching();
+}
+
 void AHorrorTemplateCharacter::StartCrouching()
 {
-	CMC->MaxWalkSpeed = CrouchSpeed;
+	IsCrouching = true;
+	CMC->MaxWalkSpeed = PlayerData->CrouchSpeed;
 	CrouchTimeLine->Play();
 }
 
 void AHorrorTemplateCharacter::StopCrouching()
 {
-	CMC->MaxWalkSpeed = WalkSpeed;
+	IsCrouching = false;
+	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	CrouchTimeLine->Reverse();
 }
 
-void AHorrorTemplateCharacter::TimeLineProgress(float Value)
+void AHorrorTemplateCharacter::TimeLineProgress(float Value) const
 {
 	const float newHeight = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
 	GetCapsuleComponent()->SetCapsuleHalfHeight(newHeight);
 }
 
-void AHorrorTemplateCharacter::TimeLineFinished()
+void AHorrorTemplateCharacter::TimeLineFinished() const
 {
 	if (CrouchTimeLine->GetPlaybackPosition() == 0.0f)
 		GetCapsuleComponent()->SetCapsuleHalfHeight(PlayerHeight);
@@ -165,10 +185,13 @@ void AHorrorTemplateCharacter::TimeLineFinished()
 
 void AHorrorTemplateCharacter::StartSprinting()
 {
-	CMC->MaxWalkSpeed = SprintSpeed;
+	if (IsCrouching)
+		StopCrouching();
+
+	CMC->MaxWalkSpeed = PlayerData->SprintSpeed;
 }
 
 void AHorrorTemplateCharacter::StopSprinting()
 {
-	CMC->MaxWalkSpeed = WalkSpeed;
+	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 }
