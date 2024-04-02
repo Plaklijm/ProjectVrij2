@@ -55,7 +55,7 @@ class AHorrorTemplateCharacter : public ACharacter
 	
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CrouchTimeLine;
-	
+
 public:
 	AHorrorTemplateCharacter();
 

@@ -37,7 +37,7 @@ void UInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	
 	const FVector Start = FPController->PlayerCameraManager->GetCameraLocation();
 	FVector Rotation(FPController->GetControlRotation().Vector());
-	const FVector End = Rotation * 150.f + Start;
+	const FVector End = Rotation * 200.f + Start;
 	
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
@@ -72,7 +72,7 @@ void UInteractComponent::Cast()
 		UE_LOG(LogTemp, Warning, TEXT("Cast!!"));
 		const FVector Start = FPController->PlayerCameraManager->GetCameraLocation();
 		FVector Rotation(FPController->GetControlRotation().Vector());
-		const FVector End = Rotation * 150.f + Start;
+		const FVector End = Rotation * 200.f + Start;
 	
 		TArray<AActor*> ActorsToIgnore;
 		ActorsToIgnore.Add(GetOwner());
