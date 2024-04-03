@@ -28,14 +28,15 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(RootComponent);
 	SpringArmComponent->TargetArmLength = 0;
-	SpringArmComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
+	SpringArmComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f)); // Position the camera
 	SpringArmComponent->bUsePawnControlRotation = true;
 	SpringArmComponent->bEnableCameraRotationLag = true;
-	SpringArmComponent->CameraRotationLagSpeed = 20.f;
+	SpringArmComponent->CameraRotationLagSpeed = 25.f;
 	
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 
 	// Create CrouchTimelineComponent
@@ -50,8 +51,8 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
-	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
-	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+	Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
+	Mesh1P->SetRelativeLocation(FVector(-20.f, 0.f, -150.f));
 
 	CMC = GetCharacterMovement();
 }
