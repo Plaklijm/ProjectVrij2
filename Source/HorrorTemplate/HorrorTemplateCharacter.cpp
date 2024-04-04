@@ -47,12 +47,12 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
+	Mesh1P->SetOnlyOwnerSee(false);
 	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
-	Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
-	Mesh1P->SetRelativeLocation(FVector(-20.f, 0.f, -150.f));
+	Mesh1P->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	Mesh1P->SetRelativeLocation(FVector(-5.f, 0.f, -155.f));
 
 	CMC = GetCharacterMovement();
 }
