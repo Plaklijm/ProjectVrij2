@@ -36,7 +36,7 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f)); 
 	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 
 	// Create CrouchTimelineComponent
@@ -44,6 +44,8 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 
 	// Create InteractComponent
 	InteractComponent = CreateDefaultSubobject<UInteractComponent>(TEXT("InteractComponent"));
+
+	//LampComponent = CreateDefaultSubobject<ULampComponent>(TEXT("LampComponent"));
 	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
