@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "InteractComponent.generated.h"
 
+class AHorrorTemplateCharacter;
 class APlayerController;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -27,7 +28,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void SetPlayer(AHorrorTemplateCharacter* Player);
+	
 	void Cast();
 private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	AHorrorTemplateCharacter* PlayerCharacter;
+	UPROPERTY(VisibleAnywhere)
 	APlayerController* FPController;
 };

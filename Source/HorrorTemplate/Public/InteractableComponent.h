@@ -7,6 +7,8 @@
 #include "InteractableComponent.generated.h"
 
 
+class AHorrorTemplateCharacter;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class HORRORTEMPLATE_API UInteractableComponent : public UActorComponent
 {
@@ -24,5 +26,5 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void Execute();
+	void Execute(AHorrorTemplateCharacter* Player);
 };

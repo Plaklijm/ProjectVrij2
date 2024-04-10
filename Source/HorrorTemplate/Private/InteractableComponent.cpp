@@ -3,6 +3,8 @@
 
 #include "HorrorTemplate/Public/InteractableComponent.h"
 
+#include "HorrorTemplate/HorrorTemplateCharacter.h"
+
 // Sets default values for this component's properties
 UInteractableComponent::UInteractableComponent()
 {
@@ -32,9 +34,8 @@ void UInteractableComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
-void UInteractableComponent::Execute()
+void UInteractableComponent::Execute(AHorrorTemplateCharacter* Player)
 {
-	UE_LOG(LogTemp, Warning, TEXT("INTERACT!!"));
-	GetOwner()->Destroy();
+	Player->AddJuice(10);
+	
 }
-

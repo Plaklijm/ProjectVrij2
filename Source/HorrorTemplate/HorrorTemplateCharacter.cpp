@@ -44,7 +44,7 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 
 	// Create InteractComponent
 	InteractComponent = CreateDefaultSubobject<UInteractComponent>(TEXT("InteractComponent"));
-
+	InteractComponent->SetPlayer(this);
 	//LampComponent = CreateDefaultSubobject<ULampComponent>(TEXT("LampComponent"));
 	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
@@ -116,11 +116,28 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Interact
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Started, InteractComponent, &UInteractComponent::Cast);
+
+		// Drink
+		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AHorrorTemplateCharacter::AddJuice(float amount)
+{
+	PlayerData->JuiceAmount += amount;
+	const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
+	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
+}
+
+void AHorrorTemplateCharacter::DrinkJuice()
+{
+	PlayerData->JuiceAmount -= GetWorld()->GetDeltaSeconds();
+	const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
+	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
 }
 
 

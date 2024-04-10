@@ -6,6 +6,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Actor.h"
 #include "HorrorTemplate/Public/InteractableComponent.h"
+#include "HorrorTemplate/HorrorTemplateCharacter.h"
 
 // Sets default values for this component's properties
 UInteractComponent::UInteractComponent()
@@ -65,6 +66,20 @@ void UInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Blocking Hit =: %s"), HitInteractable ? TEXT("true") : TEXT("false")));
 }
 
+void UInteractComponent::SetPlayer(AHorrorTemplateCharacter* Player)
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Player->GetName()));
+	
+	if (Player != nullptr)
+	{
+		this->PlayerCharacter = Player;
+	}
+	else
+	{
+		this->PlayerCharacter = nullptr;
+	}
+}
+
 void UInteractComponent::Cast()
 {
 	if (HitInteractable)
@@ -84,10 +99,9 @@ void UInteractComponent::Cast()
 
 		if (auto Actor = HitResult.GetActor())
 		{
-			auto InteractableComponent = Actor->FindComponentByClass<UInteractableComponent>();
-			if (InteractableComponent)
+			if (auto InteractableComponent = Actor->FindComponentByClass<UInteractableComponent>())
 			{
-				InteractableComponent->Execute();
+				InteractableComponent->Execute(PlayerCharacter);
 			}
 		}
 	}
