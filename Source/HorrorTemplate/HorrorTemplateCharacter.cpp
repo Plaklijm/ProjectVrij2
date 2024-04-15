@@ -23,7 +23,7 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(35.f, 96.0f);
 		
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(RootComponent);
@@ -76,6 +76,8 @@ void AHorrorTemplateCharacter::BeginPlay()
 	}
 
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
+	PlayerData->JuiceAmount = 0;
+	PlayerData->JuiceConsumedAmount = 0;
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -135,7 +137,9 @@ void AHorrorTemplateCharacter::AddJuice(float amount)
 
 void AHorrorTemplateCharacter::DrinkJuice()
 {
-	PlayerData->JuiceAmount -= GetWorld()->GetDeltaSeconds();
+	auto temp = GetWorld()->GetDeltaSeconds() * 4;
+	PlayerData->JuiceAmount -= GetWorld()->GetDeltaSeconds() * 4;
+	PlayerData->JuiceConsumedAmount += GetWorld()->GetDeltaSeconds() * 4;
 	const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
 	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
 }

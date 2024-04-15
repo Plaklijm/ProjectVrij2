@@ -50,8 +50,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	UCurveFloat* CrouchCurve;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
 	float JuiceAmount = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	float JuiceConsumedAmount = 0;
 public:
 	UPlayerDataAsset() = default;
 };
