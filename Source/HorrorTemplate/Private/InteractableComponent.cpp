@@ -36,6 +36,6 @@ void UInteractableComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void UInteractableComponent::Execute(AHorrorTemplateCharacter* Player)
 {
-	Player->AddJuice(10);
-	
+	Player->AddJuice(20);
+	GetOwner()->Destroy();
 }
