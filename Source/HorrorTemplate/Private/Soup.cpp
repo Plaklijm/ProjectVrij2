@@ -24,3 +24,13 @@ void ASoup::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASoup::Interact_Implementation(AHorrorTemplateCharacter* player)
+{
+	IInteractInterface::Interact_Implementation(player);
+}
+
+void ASoup::InteractPure(AHorrorTemplateCharacter* player)
+{
+	
+}
+

@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InteractInterface.h"
 #include "GameFramework/Actor.h"
 #include "Soup.generated.h"
 
 UCLASS()
-class HORRORTEMPLATE_API ASoup : public AActor
+class HORRORTEMPLATE_API ASoup : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
 
@@ -22,4 +23,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void Interact_Implementation(AHorrorTemplateCharacter* player) override;
+	
+	virtual void InteractPure(AHorrorTemplateCharacter* player) override;
 };

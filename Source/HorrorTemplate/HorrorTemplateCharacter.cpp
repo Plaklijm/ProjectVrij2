@@ -78,6 +78,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	PlayerData->JuiceAmount = 0;
 	PlayerData->JuiceConsumedAmount = 0;
+	PlayerData->CollectedCores.Empty();
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -146,6 +147,11 @@ void AHorrorTemplateCharacter::DrinkJuice()
 		const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
 		GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
 	}
+}
+
+void AHorrorTemplateCharacter::AddCore(ACore* core)
+{
+	PlayerData->CollectedCores.Add(core);
 }
 
 

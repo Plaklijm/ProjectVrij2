@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Core.h"
 #include "Engine/DataAsset.h"
 #include "PlayerDataAsset.generated.h"
 
@@ -49,12 +50,19 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	UCurveFloat* CrouchCurve;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Cores, meta=(AllowPrivateAccess = "true"))
+	TArray<ACore*> CollectedCores;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
 	float JuiceAmount = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
 	float JuiceConsumedAmount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
+	float RootJuiceAddAmount = 0;
+
 public:
 	UPlayerDataAsset() = default;
 };
