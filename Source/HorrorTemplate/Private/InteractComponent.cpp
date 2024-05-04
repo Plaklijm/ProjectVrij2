@@ -3,9 +3,9 @@
 
 #include "HorrorTemplate/Public/InteractComponent.h"
 
+#include "InteractInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Actor.h"
-#include "HorrorTemplate/Public/InteractableComponent.h"
 #include "HorrorTemplate/HorrorTemplateCharacter.h"
 
 // Sets default values for this component's properties
@@ -53,7 +53,7 @@ void UInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	{
 		if (auto Actor = HitResult.GetActor())
 		{
-			if (Actor->FindComponentByClass<UInteractableComponent>())
+			if (HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
 			{
 				HitInteractable = true;
 			}
@@ -80,7 +80,7 @@ void UInteractComponent::SetPlayer(AHorrorTemplateCharacter* Player)
 	}
 }
 
-void UInteractComponent::Cast()
+void UInteractComponent::InteractCast()
 {
 	if (HitInteractable)
 	{
@@ -96,13 +96,11 @@ void UInteractComponent::Cast()
 	
 		UKismetSystemLibrary::SphereTraceSingle(GetWorld(), Start, End, 5, UEngineTypes::ConvertToTraceType(ECC_Camera),
 			false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true);
-
-		if (auto Actor = HitResult.GetActor())
-		{
-			if (auto InteractableComponent = Actor->FindComponentByClass<UInteractableComponent>())
+		
+			if (HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
 			{
-				InteractableComponent->Execute(PlayerCharacter);
+				Cast<IInteractInterface>(HitResult.GetActor())->InteractPure(Cast<AHorrorTemplateCharacter>(GetOwner()));
+				IInteractInterface::Execute_Interact(HitResult.GetActor(), Cast<AHorrorTemplateCharacter>(GetOwner()));
 			}
-		}
 	}
 }

@@ -30,7 +30,7 @@ public:
 
 	void SetPlayer(AHorrorTemplateCharacter* Player);
 	
-	void Cast();
+	void InteractCast();
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	AHorrorTemplateCharacter* PlayerCharacter;
