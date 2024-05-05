@@ -9,6 +9,7 @@
 #include "HorrorTemplateCharacter.generated.h"
 
 class ULampComponent;
+class UTeaseSystem;
 class UPlayerDataAsset;
 class UInteractComponent;
 class UTimelineComponent;
@@ -40,8 +41,8 @@ class AHorrorTemplateCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UInteractComponent* InteractComponent;
 	
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	ULampComponent* LampComponent;*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UTeaseSystem* TeaseComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Settings, meta=(AllowPrivateAccess = "true"))
 	UPlayerDataAsset* PlayerData;
