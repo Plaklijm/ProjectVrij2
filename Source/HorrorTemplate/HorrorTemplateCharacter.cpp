@@ -141,9 +141,9 @@ void AHorrorTemplateCharacter::DrinkJuice()
 {
 	if (PlayerData->JuiceAmount > 0)
 	{
-		auto temp = GetWorld()->GetDeltaSeconds() * 4;
-		PlayerData->JuiceAmount -= GetWorld()->GetDeltaSeconds() * 4;
-		PlayerData->JuiceConsumedAmount += GetWorld()->GetDeltaSeconds() * 4;
+		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
+		PlayerData->JuiceAmount -= temp;
+		PlayerData->JuiceConsumedAmount += temp;
 		const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
 		GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
 	}

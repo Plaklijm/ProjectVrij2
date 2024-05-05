@@ -63,6 +63,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
 	float RootJuiceAddAmount = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
+	float RootJuiceReplenishSpeedMultiplier = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
+	float JuiceDrinkSpeedMultiplier = 3;
+
 public:
 	UPlayerDataAsset() = default;
 };

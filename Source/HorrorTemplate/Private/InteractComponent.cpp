@@ -72,7 +72,7 @@ void UInteractComponent::SetPlayer(AHorrorTemplateCharacter* Player)
 	
 	if (Player != nullptr)
 	{
-		this->PlayerCharacter = Player;
+		this->PlayerCharacter = Player; 
 	}
 	else
 	{
