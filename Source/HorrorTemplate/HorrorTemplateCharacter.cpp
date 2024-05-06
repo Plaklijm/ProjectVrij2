@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "TeaseSystem.h"
 #include "Components/TimelineComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -45,7 +46,8 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	// Create InteractComponent
 	InteractComponent = CreateDefaultSubobject<UInteractComponent>(TEXT("InteractComponent"));
 	InteractComponent->SetPlayer(this);
-	//LampComponent = CreateDefaultSubobject<ULampComponent>(TEXT("LampComponent"));
+
+	TeaseComponent = CreateDefaultSubobject<UTeaseSystem>(TEXT("TeaseComponent"));
 	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
@@ -78,6 +80,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	PlayerData->JuiceAmount = 0;
 	PlayerData->JuiceConsumedAmount = 0;
+	PlayerData->CollectedCores.Empty();
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -117,7 +120,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->LookAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::Look);
 
 		// Interact
-		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Started, InteractComponent, &UInteractComponent::Cast);
+		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Started, InteractComponent, &UInteractComponent::InteractCast);
 
 		// Drink
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
@@ -128,6 +131,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	}
 }
 
+
 void AHorrorTemplateCharacter::AddJuice(float amount)
 {
 	PlayerData->JuiceAmount += amount;
@@ -137,11 +141,19 @@ void AHorrorTemplateCharacter::AddJuice(float amount)
 
 void AHorrorTemplateCharacter::DrinkJuice()
 {
-	auto temp = GetWorld()->GetDeltaSeconds() * 4;
-	PlayerData->JuiceAmount -= GetWorld()->GetDeltaSeconds() * 4;
-	PlayerData->JuiceConsumedAmount += GetWorld()->GetDeltaSeconds() * 4;
-	const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
-	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
+	if (PlayerData->JuiceAmount > 0)
+	{
+		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
+		PlayerData->JuiceAmount -= temp;
+		PlayerData->JuiceConsumedAmount += temp;
+		const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
+		GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
+	}
+}
+
+void AHorrorTemplateCharacter::AddCore(ACore* core)
+{
+	PlayerData->CollectedCores.Add(core);
 }
 
 

@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Public/Core.h"
 #include "HorrorTemplateCharacter.generated.h"
 
 class ULampComponent;
+class UTeaseSystem;
 class UPlayerDataAsset;
 class UInteractComponent;
 class UTimelineComponent;
@@ -39,8 +41,8 @@ class AHorrorTemplateCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UInteractComponent* InteractComponent;
 	
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	ULampComponent* LampComponent;*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UTeaseSystem* TeaseComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Settings, meta=(AllowPrivateAccess = "true"))
 	UPlayerDataAsset* PlayerData;
@@ -95,9 +97,14 @@ protected:
 	// End of APawn interface
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void AddJuice(float amount);
 
+	UFUNCTION(BlueprintCallable)
 	void DrinkJuice();
+
+	UFUNCTION(BlueprintCallable)
+	void AddCore(ACore* core);
 	
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
