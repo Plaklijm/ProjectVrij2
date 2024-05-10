@@ -58,6 +58,7 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	Mesh1P->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	Mesh1P->SetRelativeLocation(FVector(-5.f, 0.f, -155.f));
 
+
 	CMC = GetCharacterMovement();
 }
 

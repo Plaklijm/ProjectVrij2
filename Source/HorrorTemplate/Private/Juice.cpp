@@ -27,6 +27,8 @@ void AJuice::Tick(float DeltaTime)
 void AJuice::Interact_Implementation(AHorrorTemplateCharacter* player)
 {
 	IInteractInterface::Interact_Implementation(player);
+
+	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, TEXT("Hello From C++ Juice"));
 }
 
 void AJuice::InteractPure(AHorrorTemplateCharacter* player)
