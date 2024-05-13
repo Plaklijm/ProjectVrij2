@@ -55,10 +55,16 @@ public:
 	TArray<ACore*> CollectedCores;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
-	float JuiceAmount = 0;
+	float JuiceFlaskAmount = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
 	float JuiceConsumedAmount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
+	float JuiceMaxFlaskAmount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
+	float JuiceMaxConsumeAmount = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Juice, meta=(AllowPrivateAccess = "true"))
 	float RootJuiceAddAmount = 0;

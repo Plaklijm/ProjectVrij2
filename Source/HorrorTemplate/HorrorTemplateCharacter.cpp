@@ -79,7 +79,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	}
 
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
-	PlayerData->JuiceAmount = 0;
+	PlayerData->JuiceFlaskAmount = 0;
 	PlayerData->JuiceConsumedAmount = 0;
 	PlayerData->CollectedCores.Empty();
 
@@ -135,20 +135,22 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void AHorrorTemplateCharacter::AddJuice(float amount)
 {
-	PlayerData->JuiceAmount += amount;
-	const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
-	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
+	PlayerData->JuiceFlaskAmount += amount;
+	
+	if (PlayerData->JuiceFlaskAmount > PlayerData->JuiceMaxFlaskAmount)
+	{
+		PlayerData->JuiceFlaskAmount = PlayerData->JuiceMaxFlaskAmount;
+	}
+	
 }
 
 void AHorrorTemplateCharacter::DrinkJuice()
 {
-	if (PlayerData->JuiceAmount > 0)
+	if (PlayerData->JuiceFlaskAmount > 0 && PlayerData->JuiceConsumedAmount < PlayerData->JuiceMaxConsumeAmount)
 	{
 		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
-		PlayerData->JuiceAmount -= temp;
+		PlayerData->JuiceFlaskAmount -= temp;
 		PlayerData->JuiceConsumedAmount += temp;
-		const FString TheFloatStr = FString::SanitizeFloat(PlayerData->JuiceAmount);
-		GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, *TheFloatStr );
 	}
 }
 
