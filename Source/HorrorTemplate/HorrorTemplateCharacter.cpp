@@ -13,10 +13,10 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Public/InteractComponent.h"
 #include "Public/PlayerDataAsset.h"
+#include "Components/SphereComponent.h"
+#include "Components/SceneComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -33,6 +33,7 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	SpringArmComponent->TargetArmLength = 0;
 	SpringArmComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f)); // Position the camera
 	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->bInheritRoll = false;
 	SpringArmComponent->bEnableCameraRotationLag = true;
 	SpringArmComponent->CameraRotationLagSpeed = 25.f;
 	
@@ -42,6 +43,22 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f)); 
 	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 
+	CameraCollision = CreateDefaultSubobject<USphereComponent>(TEXT("CameraCollision"));
+	CameraCollision->SetupAttachment(FirstPersonCameraComponent);
+	CameraCollision->InitSphereRadius(22.5f);
+	CameraCollision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	CameraCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+	CameraCollision->SetGenerateOverlapEvents(true);
+	CameraCollision->OnComponentBeginOverlap.AddDynamic(this, &AHorrorTemplateCharacter::OnComponentOverlap);
+
+	LeanLeft = CreateDefaultSubobject<USceneComponent>(TEXT("LeanLeft"));
+	LeanLeft->SetRelativeLocation(FVector(0.f, -40.f, 60.f));
+	LeanLeft->SetRelativeRotation(FRotator(0.f, 0.f, -15.f));
+	
+	LeanRight = CreateDefaultSubobject<USceneComponent>(TEXT("LeanRight"));
+	LeanRight->SetRelativeLocation(FVector(0.f, 40.f, 60.f));
+	LeanRight->SetRelativeRotation(FRotator(0.f, 0.f, 15.f));
+	
 	// Create CrouchTimelineComponent
 	CrouchTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("CrouchTimeLine"));
 
@@ -85,6 +102,9 @@ void AHorrorTemplateCharacter::BeginPlay()
 	PlayerData->JuiceConsumedAmount = 10;
 	PlayerData->CollectedCores.Empty();
 
+	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
+	TargetCameraLocation = DefaultCameraLocation;
+
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
 
@@ -97,9 +117,21 @@ void AHorrorTemplateCharacter::BeginPlay()
 	if (PlayerData->CrouchCurve)
 	{
 		CrouchTimeLine->AddInterpFloat(PlayerData->CrouchCurve, CrouchValue);
-	}
+	} 
 
 	CrouchTimeLine->SetTimelineFinishedFunc(TimeLineFinishedEvent);
+}
+
+void AHorrorTemplateCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+	const auto targetLoc = FMath::VInterpTo(SpringArmComponent->GetRelativeLocation(), TargetCameraLocation, DeltaSeconds, 5);
+	SpringArmComponent->SetRelativeLocation(targetLoc);
+	
+	const auto rotTemp = FRotator(SpringArmComponent->GetRelativeRotation().Pitch, SpringArmComponent->GetRelativeRotation().Yaw, TargetRoll);
+	const auto targetRot = FMath::RInterpTo(SpringArmComponent->GetRelativeRotation(), rotTemp, DeltaSeconds, 5);
+	SpringArmComponent->SetRelativeRotation(targetRot);
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -121,10 +153,12 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		// Looking
 		EnhancedInputComponent->BindAction(PlayerData->LookAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::Look);
-
+		
+		EnhancedInputComponent->BindAction(PlayerData->LeanLeftAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::OnLeanLeft);
+		EnhancedInputComponent->BindAction(PlayerData->LeanLeftAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
 		// Interact
-		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Started, InteractComponent, &UInteractComponent::InteractCast);
-
+		EnhancedInputComponent->BindAction(PlayerData->InteractAndLeanRightAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::OnLeanRight);
+		EnhancedInputComponent->BindAction(PlayerData->InteractAndLeanRightAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
 		// Drink
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
 	}
@@ -136,9 +170,12 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void AHorrorTemplateCharacter::ListenMechTrace()
 {
-
 }
 
+void AHorrorTemplateCharacter::OnComponentOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	OnLeanCompleted();
+}
 
 void AHorrorTemplateCharacter::AddJuice(float amount)
 {
@@ -240,4 +277,29 @@ void AHorrorTemplateCharacter::StartSprinting()
 void AHorrorTemplateCharacter::StopSprinting()
 {
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
+}
+
+void AHorrorTemplateCharacter::OnLeanLeft()
+{
+	TargetCameraLocation = LeanLeft->GetComponentLocation();
+	TargetRoll = 360 + LeanLeft->GetComponentRotation().Roll;
+}
+
+void AHorrorTemplateCharacter::OnLeanRight()
+{
+	if (InteractComponent->HitInteractable)
+	{
+		InteractComponent->InteractCast();
+	}
+	else
+	{
+		TargetCameraLocation = LeanRight->GetComponentLocation();
+		TargetRoll = LeanRight->GetComponentRotation().Roll;
+	}
+}
+
+void AHorrorTemplateCharacter::OnLeanCompleted()
+{
+	TargetCameraLocation = DefaultCameraLocation;
+	TargetRoll = 0;
 }
