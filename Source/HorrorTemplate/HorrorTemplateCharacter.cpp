@@ -52,12 +52,18 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	CameraCollision->OnComponentBeginOverlap.AddDynamic(this, &AHorrorTemplateCharacter::OnComponentOverlap);
 
 	LeanLeft = CreateDefaultSubobject<USceneComponent>(TEXT("LeanLeft"));
-	LeanLeft->SetRelativeLocation(FVector(0.f, -40.f, 60.f));
-	LeanLeft->SetRelativeRotation(FRotator(0.f, 0.f, -15.f));
+	LeanLeft->SetupAttachment(RootComponent);
+	LeanLeft->SetWorldLocation(FVector(0.f, -40.f, 60.f));
+	LeanLeft->SetWorldRotation(FRotator(0.f, 0.f, -15.f));
 	
-	LeanRight = CreateDefaultSubobject<USceneComponent>(TEXT("LeanRight"));
-	LeanRight->SetRelativeLocation(FVector(0.f, 40.f, 60.f));
-	LeanRight->SetRelativeRotation(FRotator(0.f, 0.f, 15.f));
+	LeanRight = CreateDefaultSubobject<USceneComponent>(TEXT("LeanRight"));\
+	LeanRight->SetupAttachment(RootComponent);
+	LeanRight->SetWorldLocation(FVector(0.f, 40.f, 60.f));
+	LeanRight->SetWorldRotation(FRotator(0.f, 0.f, 15.f));
+
+	ThrowingPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ThrowingPoint"));
+	ThrowingPoint->SetupAttachment(RootComponent);
+	ThrowingPoint->SetWorldLocation(FVector(35.f, 30.f, 40.f));
 	
 	// Create CrouchTimelineComponent
 	CrouchTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("CrouchTimeLine"));
@@ -161,6 +167,9 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->InteractAndLeanRightAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
 		// Drink
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
+
+		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::StartAttack);
+		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::FinalizeAttack);
 	}
 	else
 	{
@@ -252,6 +261,7 @@ void AHorrorTemplateCharacter::StopCrouching()
 	CrouchTimeLine->Reverse();
 }
 
+
 void AHorrorTemplateCharacter::TimeLineProgress(float Value) const
 {
 	const float newHeight = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
@@ -281,7 +291,7 @@ void AHorrorTemplateCharacter::StopSprinting()
 
 void AHorrorTemplateCharacter::OnLeanLeft()
 {
-	TargetCameraLocation = LeanLeft->GetComponentLocation();
+	TargetCameraLocation = LeanLeft->GetRelativeLocation();
 	TargetRoll = 360 + LeanLeft->GetComponentRotation().Roll;
 }
 
@@ -293,7 +303,7 @@ void AHorrorTemplateCharacter::OnLeanRight()
 	}
 	else
 	{
-		TargetCameraLocation = LeanRight->GetComponentLocation();
+		TargetCameraLocation = LeanRight->GetRelativeLocation();
 		TargetRoll = LeanRight->GetComponentRotation().Roll;
 	}
 }
@@ -303,3 +313,13 @@ void AHorrorTemplateCharacter::OnLeanCompleted()
 	TargetCameraLocation = DefaultCameraLocation;
 	TargetRoll = 0;
 }
+
+void AHorrorTemplateCharacter::StartAttack_Implementation()
+{
+}
+
+void AHorrorTemplateCharacter::FinalizeAttack_Implementation()
+{
+}
+
+

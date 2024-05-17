@@ -114,6 +114,12 @@ protected:
 	void OnLeanRight();
 	void OnLeanCompleted();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void StartAttack();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void FinalizeAttack();
+	
 	UFUNCTION()
 	void TimeLineProgress(float Value) const;
 

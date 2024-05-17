@@ -13,8 +13,13 @@ AThrowableObject::AThrowableObject()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	RootComponent = Mesh;
 
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
+	ProjectileComponent->InitialSpeed = 1200.f;
+	ProjectileComponent->MaxSpeed = 1500.f;
+	ProjectileComponent->ProjectileGravityScale = 2.f;
+	ProjectileComponent->bShouldBounce = false;
 }
 
 // Called when the game starts or when spawned

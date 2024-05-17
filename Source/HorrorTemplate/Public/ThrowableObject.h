@@ -9,7 +9,7 @@
 class UProjectileMovementComponent;
 
 UCLASS()
-class HORRORTEMPLATE_API AThrowableObject : public AActor
+class HORRORTEMPLATE_API AThrowableObject : public AActor 
 {
 	GENERATED_BODY()
 
