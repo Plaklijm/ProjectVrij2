@@ -13,6 +13,8 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Public/InteractComponent.h"
 #include "Public/PlayerDataAsset.h"
 
@@ -80,7 +82,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	PlayerData->JuiceFlaskAmount = 0;
-	PlayerData->JuiceConsumedAmount = 0;
+	PlayerData->JuiceConsumedAmount = 10;
 	PlayerData->CollectedCores.Empty();
 
 	FOnTimelineFloat CrouchValue;
@@ -130,6 +132,11 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AHorrorTemplateCharacter::ListenMechTrace()
+{
+
 }
 
 

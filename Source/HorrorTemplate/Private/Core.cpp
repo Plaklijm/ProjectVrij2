@@ -34,3 +34,21 @@ void ACore::InteractPure(AHorrorTemplateCharacter* player)
 	
 }
 
+void ACore::FadeIn_Implementation()
+{
+	IListenMechanic::FadeIn_Implementation();
+}
+
+void ACore::FadeOut_Implementation()
+{
+	IListenMechanic::FadeOut_Implementation();
+}
+
+void ACore::FadeInPure()
+{
+}
+
+void ACore::FadeOutPure()
+{
+}
+

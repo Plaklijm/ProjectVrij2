@@ -96,6 +96,8 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface
 
+	void ListenMechTrace();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void AddJuice(float amount);

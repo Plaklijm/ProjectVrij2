@@ -34,3 +34,21 @@ void ASoup::InteractPure(AHorrorTemplateCharacter* player)
 	
 }
 
+void ASoup::FadeIn_Implementation()
+{
+	IListenMechanic::FadeIn_Implementation();
+}
+
+void ASoup::FadeOut_Implementation()
+{
+	IListenMechanic::FadeOut_Implementation();
+}
+
+void ASoup::FadeInPure()
+{
+}
+
+void ASoup::FadeOutPure()
+{
+}
+

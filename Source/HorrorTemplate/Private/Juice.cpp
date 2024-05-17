@@ -36,4 +36,22 @@ void AJuice::InteractPure(AHorrorTemplateCharacter* player)
 	
 }
 
+void AJuice::FadeIn_Implementation()
+{
+	IListenMechanic::FadeIn_Implementation();
+}
+
+void AJuice::FadeOut_Implementation()
+{
+	IListenMechanic::FadeOut_Implementation();
+}
+
+void AJuice::FadeInPure()
+{
+}
+
+void AJuice::FadeOutPure()
+{
+}
+
 
