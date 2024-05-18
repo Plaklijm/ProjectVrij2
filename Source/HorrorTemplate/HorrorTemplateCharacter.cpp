@@ -62,8 +62,8 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	LeanRight->SetWorldRotation(FRotator(0.f, 0.f, 15.f));
 
 	ThrowingPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ThrowingPoint"));
-	ThrowingPoint->SetupAttachment(RootComponent);
-	ThrowingPoint->SetWorldLocation(FVector(35.f, 30.f, 40.f));
+	ThrowingPoint->SetupAttachment(FirstPersonCameraComponent);
+	ThrowingPoint->SetWorldLocation(FVector(35.f, 30.f, -40.f));
 	
 	// Create CrouchTimelineComponent
 	CrouchTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("CrouchTimeLine"));
@@ -102,6 +102,8 @@ void AHorrorTemplateCharacter::BeginPlay()
 			Subsystem->AddMappingContext(PlayerData->DefaultMappingContext, 0);
 		}
 	}
+
+	FootstepInterval = PlayerData->WalkFootstepInterval;
 
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	PlayerData->JuiceFlaskAmount = 0;
@@ -251,6 +253,7 @@ void AHorrorTemplateCharacter::StartCrouching()
 {
 	IsCrouching = true;
 	CMC->MaxWalkSpeed = PlayerData->CrouchSpeed;
+	FootstepInterval = PlayerData->CrouchFootstepInterval;
 	CrouchTimeLine->Play();
 }
 
@@ -258,6 +261,7 @@ void AHorrorTemplateCharacter::StopCrouching()
 {
 	IsCrouching = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
+	FootstepInterval = PlayerData->WalkFootstepInterval;
 	CrouchTimeLine->Reverse();
 }
 
@@ -281,12 +285,16 @@ void AHorrorTemplateCharacter::StartSprinting()
 	if (IsCrouching)
 		StopCrouching();
 
+	IsSprinting = true;
 	CMC->MaxWalkSpeed = PlayerData->SprintSpeed;
+	FootstepInterval = PlayerData->RunFootstepInterval;
 }
 
 void AHorrorTemplateCharacter::StopSprinting()
 {
+	IsSprinting = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
+	FootstepInterval = PlayerData->WalkFootstepInterval;
 }
 
 void AHorrorTemplateCharacter::OnLeanLeft()

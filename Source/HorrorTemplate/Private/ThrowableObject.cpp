@@ -14,12 +14,17 @@ AThrowableObject::AThrowableObject()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
+	Mesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
 
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
 	ProjectileComponent->InitialSpeed = 1200.f;
 	ProjectileComponent->MaxSpeed = 1500.f;
 	ProjectileComponent->ProjectileGravityScale = 2.f;
-	ProjectileComponent->bShouldBounce = false;
+	ProjectileComponent->bShouldBounce = true;
+	ProjectileComponent->Bounciness = .4f;
+	ProjectileComponent->Friction = .5f;
+	ProjectileComponent->BounceVelocityStopSimulatingThreshold = 10.f;
+	ProjectileComponent->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned

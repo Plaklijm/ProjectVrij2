@@ -56,6 +56,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	UCurveFloat* CrouchCurve;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	float WalkFootstepInterval;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	float RunFootstepInterval;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	float CrouchFootstepInterval;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Cores, meta=(AllowPrivateAccess = "true"))
 	TArray<ACore*> CollectedCores;
 	

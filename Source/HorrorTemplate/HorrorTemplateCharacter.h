@@ -70,7 +70,13 @@ class AHorrorTemplateCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, Category=Movement)
 	float CrouchHeight;
 
-	UPROPERTY(VisibleAnywhere, Category=Movement)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	float FootstepInterval;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	bool IsSprinting;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	bool IsCrouching;
 
 	UPROPERTY(VisibleAnywhere, Category=Camera)
