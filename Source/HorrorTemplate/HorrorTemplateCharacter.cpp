@@ -109,7 +109,9 @@ void AHorrorTemplateCharacter::BeginPlay()
 	PlayerData->JuiceFlaskAmount = 0;
 	PlayerData->JuiceConsumedAmount = 10;
 	PlayerData->CollectedCores.Empty();
-
+	PlayerData->Stamina = PlayerData->MaxStamina;
+	CanReplenishStamina = true;
+	
 	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
 	TargetCameraLocation = DefaultCameraLocation;
 
@@ -140,6 +142,8 @@ void AHorrorTemplateCharacter::Tick(float DeltaSeconds)
 	const auto rotTemp = FRotator(SpringArmComponent->GetRelativeRotation().Pitch, SpringArmComponent->GetRelativeRotation().Yaw, TargetRoll);
 	const auto targetRot = FMath::RInterpTo(SpringArmComponent->GetRelativeRotation(), rotTemp, DeltaSeconds, 5);
 	SpringArmComponent->SetRelativeRotation(targetRot);
+
+	ReplenishStamina();
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -150,7 +154,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::StartSprinting);
+		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::StartSprinting);
 		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopSprinting);
 
 		// Crouching
@@ -284,14 +288,25 @@ void AHorrorTemplateCharacter::StartSprinting()
 {
 	if (IsCrouching)
 		StopCrouching();
+	else if (PlayerData->Stamina <= 0)
+	{
+		StopSprinting();
+	}
+	else
+	{
+		UseStamina(0);
+		CanReplenishStamina = false;
+		IsSprinting = true;
+		CMC->MaxWalkSpeed = PlayerData->SprintSpeed;
+		FootstepInterval = PlayerData->RunFootstepInterval;
+	}
 
-	IsSprinting = true;
-	CMC->MaxWalkSpeed = PlayerData->SprintSpeed;
-	FootstepInterval = PlayerData->RunFootstepInterval;
 }
 
 void AHorrorTemplateCharacter::StopSprinting()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, TEXT("StopSprinting"));
+	CanReplenishStamina = true;
 	IsSprinting = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	FootstepInterval = PlayerData->WalkFootstepInterval;
@@ -320,6 +335,33 @@ void AHorrorTemplateCharacter::OnLeanCompleted()
 {
 	TargetCameraLocation = DefaultCameraLocation;
 	TargetRoll = 0;
+}
+
+void AHorrorTemplateCharacter::UseStamina(float Amount)
+{
+	if (PlayerData->Stamina >= 0)
+	{
+		if (IsSprinting)
+		{
+			PlayerData->Stamina -= PlayerData->StaminaConsumeSpeed * GetWorld()->GetDeltaSeconds();
+		}
+	}
+}
+
+void AHorrorTemplateCharacter::ReplenishStamina()
+{
+	if (CanReplenishStamina)
+	{
+		if (PlayerData->Stamina < PlayerData->MaxStamina)
+		{
+			PlayerData->Stamina += PlayerData->StaminaReplenishSpeed * GetWorld()->GetDeltaSeconds();
+		}
+		else
+		{
+			PlayerData->Stamina = PlayerData->MaxStamina;
+		}
+			
+	}
 }
 
 void AHorrorTemplateCharacter::StartAttack_Implementation()

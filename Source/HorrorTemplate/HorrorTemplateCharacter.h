@@ -70,6 +70,9 @@ class AHorrorTemplateCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, Category=Movement)
 	float CrouchHeight;
 
+	UPROPERTY(VisibleAnywhere, Category=Movement)
+	bool CanReplenishStamina;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	float FootstepInterval;
 
@@ -90,7 +93,7 @@ class AHorrorTemplateCharacter : public ACharacter
 	
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CrouchTimeLine;
-
+	
 public:
 	AHorrorTemplateCharacter();
 
@@ -119,6 +122,9 @@ protected:
 	void OnLeanLeft();
 	void OnLeanRight();
 	void OnLeanCompleted();
+
+	void UseStamina(float Amount);
+	void ReplenishStamina();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void StartAttack();
