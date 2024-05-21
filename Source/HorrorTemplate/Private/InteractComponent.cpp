@@ -84,7 +84,6 @@ void UInteractComponent::InteractCast()
 {
 	if (HitInteractable)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Cast!!"));
 		const FVector Start = FPController->PlayerCameraManager->GetCameraLocation();
 		FVector Rotation(FPController->GetControlRotation().Vector());
 		const FVector End = Rotation * 200.f + Start;

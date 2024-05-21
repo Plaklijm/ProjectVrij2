@@ -17,6 +17,8 @@ class USpringArmComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCharacterMovementComponent;
+class USceneComponent;
+class USphereComponent;
 class UCameraComponent;
 struct FInputActionValue;
 
@@ -36,14 +38,26 @@ class AHorrorTemplateCharacter : public ACharacter
 	UCameraComponent* FirstPersonCameraComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USphereComponent* CameraCollision;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true")) 
 	UInteractComponent* InteractComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UTeaseSystem* TeaseComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess = "true"))
+	USceneComponent* LeanLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess = "true"))
+	USceneComponent* LeanRight;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* ThrowingPoint;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Settings, meta=(AllowPrivateAccess = "true"))
 	UPlayerDataAsset* PlayerData;
 	
@@ -57,16 +71,36 @@ class AHorrorTemplateCharacter : public ACharacter
 	float CrouchHeight;
 
 	UPROPERTY(VisibleAnywhere, Category=Movement)
+	bool CanReplenishStamina;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	float FootstepInterval;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	bool IsSprinting;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	bool IsCrouching;
+
+	UPROPERTY(VisibleAnywhere, Category=Camera)
+	FVector DefaultCameraLocation;
+
+	UPROPERTY(VisibleAnywhere, Category=Camera)
+	FVector TargetCameraLocation;
+
+	UPROPERTY(VisibleAnywhere, Category=Camera)
+	float TargetRoll;
 	
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CrouchTimeLine;
-
+	
 public:
 	AHorrorTemplateCharacter();
 
 protected:
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 
@@ -85,6 +119,19 @@ protected:
 	void StartSprinting();
 	void StopSprinting();
 
+	void OnLeanLeft();
+	void OnLeanRight();
+	void OnLeanCompleted();
+
+	void UseStamina(float Amount);
+	void ReplenishStamina();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void StartAttack();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void FinalizeAttack();
+	
 	UFUNCTION()
 	void TimeLineProgress(float Value) const;
 
@@ -97,6 +144,10 @@ protected:
 	// End of APawn interface
 
 	void ListenMechTrace();
+
+	UFUNCTION()
+	void OnComponentOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                        int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:
 	UFUNCTION(BlueprintCallable)
