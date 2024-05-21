@@ -40,3 +40,12 @@ void AThrowableObject::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AThrowableObject::InteractPure(AHorrorTemplateCharacter* player)
+{
+}
+
+void AThrowableObject::Interact_Implementation(AHorrorTemplateCharacter* player)
+{
+	IInteractInterface::Interact_Implementation(player);
+}
+

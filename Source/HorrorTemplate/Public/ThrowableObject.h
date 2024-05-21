@@ -3,23 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InteractInterface.h"
 #include "GameFramework/Actor.h"
 #include "ThrowableObject.generated.h"
 
 class UProjectileMovementComponent;
 
 UCLASS()
-class HORRORTEMPLATE_API AThrowableObject : public AActor 
+class HORRORTEMPLATE_API AThrowableObject : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileComponent;
-
 public:
 	// Sets default values for this actor's properties
 	AThrowableObject();
@@ -31,4 +31,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void InteractPure(AHorrorTemplateCharacter* player) override;
+	virtual void Interact_Implementation(AHorrorTemplateCharacter* player) override;
 };
