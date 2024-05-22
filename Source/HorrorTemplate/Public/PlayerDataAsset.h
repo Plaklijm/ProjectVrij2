@@ -100,7 +100,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
 	float JuiceDrinkSpeedMultiplier = 3;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	float PassiveJuiceDiminishMultiplier;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta=(AllowPrivateAccess = "true"))
+	FName AIVisionTargetBone = "head";
 public:
 	UPlayerDataAsset() = default;
 };
