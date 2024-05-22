@@ -103,6 +103,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
 	float PassiveJuiceDiminishMultiplier;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	float SightJuiceDiminishMultiplier;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	float JuiceDiminishMultiplier;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta=(AllowPrivateAccess = "true"))
 	FName AIVisionTargetBone = "head";

@@ -144,6 +144,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	PlayerData->CollectedCores.Empty();
 	PlayerData->Stamina = PlayerData->MaxStamina;
 	CanReplenishStamina = true;
+	PlayerData->JuiceDiminishMultiplier = PlayerData->PassiveJuiceDiminishMultiplier;
 	
 	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
 	TargetCameraLocation = DefaultCameraLocation;
@@ -262,12 +263,24 @@ bool AHorrorTemplateCharacter::ConsumeJuice() const
 {
 	if (PlayerData->JuiceConsumedAmount > 0)
 	{
-		PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->PassiveJuiceDiminishMultiplier;
+		PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
 		return false;
 	}
 
 	PlayerData->JuiceConsumedAmount = 0;
 	return true;
+}
+
+void AHorrorTemplateCharacter::IsInSightJuiceDiminishChanger(bool IsInSight) const
+{
+	if (IsInSight)
+	{
+		PlayerData->JuiceDiminishMultiplier = PlayerData->SightJuiceDiminishMultiplier;
+	}
+	else
+	{
+		PlayerData->JuiceDiminishMultiplier = PlayerData->PassiveJuiceDiminishMultiplier;
+	}
 }
 
 void AHorrorTemplateCharacter::AddCore(ACore* core)
@@ -379,7 +392,6 @@ void AHorrorTemplateCharacter::StartSprinting()
 
 void AHorrorTemplateCharacter::StopSprinting()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, TEXT("StopSprinting"));
 	CanReplenishStamina = true;
 	IsSprinting = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;

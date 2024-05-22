@@ -166,6 +166,9 @@ public:
 	bool ConsumeJuice() const;
 
 	UFUNCTION(BlueprintCallable)
+	void IsInSightJuiceDiminishChanger(bool IsInSight) const;
+	
+	UFUNCTION(BlueprintCallable)
 	void AddCore(ACore* core);
 
 	UFUNCTION(BlueprintCallable)
