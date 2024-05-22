@@ -87,6 +87,39 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	CMC = GetCharacterMovement();
 }
 
+bool AHorrorTemplateCharacter::CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation,
+	int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor, const bool* bWasVisible,
+	int32* UserData) const
+{
+	static const FName NAME_AILineOfSight = FName(TEXT("TestPawnLineOfSight"));
+	FHitResult HitResult;
+
+	FVector SocketLocation = GetMesh1P()->GetSocketLocation(PlayerData->AIVisionTargetBone);
+
+	const bool bHitSocket = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, SocketLocation,
+		FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
+	NumberOfLoSChecksPerformed++;
+	if (bHitSocket == false || (IsValid(HitResult.GetActor()) && HitResult.GetActor()->IsOwnedBy(this)))
+	{
+		OutSeenLocation = SocketLocation;
+		OutSightStrength = 1;
+		return true;
+	}
+
+	const bool bHit = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, GetActorLocation(),
+		FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
+	NumberOfLoSChecksPerformed++;
+	if (bHit == false || (IsValid(HitResult.GetActor()) && HitResult.GetActor()->IsOwnedBy(this)))
+	{
+		OutSeenLocation = GetActorLocation();
+		OutSightStrength = 1;
+		return true;
+	}
+
+	OutSightStrength = 0;
+	return false;
+}
+
 void AHorrorTemplateCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -111,6 +144,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	PlayerData->CollectedCores.Empty();
 	PlayerData->Stamina = PlayerData->MaxStamina;
 	CanReplenishStamina = true;
+	PlayerData->JuiceDiminishMultiplier = PlayerData->PassiveJuiceDiminishMultiplier;
 	
 	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
 	TargetCameraLocation = DefaultCameraLocation;
@@ -213,9 +247,57 @@ void AHorrorTemplateCharacter::DrinkJuice()
 	}
 }
 
+void AHorrorTemplateCharacter::JuiceChunk(float amount)
+{
+	if (PlayerData->JuiceConsumedAmount >= amount)
+	{
+		PlayerData->JuiceConsumedAmount -= amount;
+	}
+	else
+	{
+		PlayerData->JuiceConsumedAmount = 0;
+	}
+}
+
+bool AHorrorTemplateCharacter::ConsumeJuice() const
+{
+	if (PlayerData->JuiceConsumedAmount > 0)
+	{
+		PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
+		return false;
+	}
+
+	PlayerData->JuiceConsumedAmount = 0;
+	return true;
+}
+
+void AHorrorTemplateCharacter::IsInSightJuiceDiminishChanger(bool IsInSight) const
+{
+	if (IsInSight)
+	{
+		PlayerData->JuiceDiminishMultiplier = PlayerData->SightJuiceDiminishMultiplier;
+	}
+	else
+	{
+		PlayerData->JuiceDiminishMultiplier = PlayerData->PassiveJuiceDiminishMultiplier;
+	}
+}
+
 void AHorrorTemplateCharacter::AddCore(ACore* core)
 {
 	PlayerData->CollectedCores.Add(core);
+}
+
+void AHorrorTemplateCharacter::StaminaAction(float StaminaCost)
+{
+	if (PlayerData->Stamina >= StaminaCost)
+	{
+		PlayerData->Stamina -= StaminaCost;
+	}
+	else
+	{
+		PlayerData->Stamina = 0;
+	}
 }
 
 
@@ -258,6 +340,7 @@ void AHorrorTemplateCharacter::StartCrouching()
 	IsCrouching = true;
 	CMC->MaxWalkSpeed = PlayerData->CrouchSpeed;
 	FootstepInterval = PlayerData->CrouchFootstepInterval;
+	PlayerData->StaminaReplenishSpeed += 2.5;
 	CrouchTimeLine->Play();
 }
 
@@ -266,6 +349,7 @@ void AHorrorTemplateCharacter::StopCrouching()
 	IsCrouching = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	FootstepInterval = PlayerData->WalkFootstepInterval;
+	PlayerData->StaminaReplenishSpeed -= 2.5;
 	CrouchTimeLine->Reverse();
 }
 
@@ -294,7 +378,10 @@ void AHorrorTemplateCharacter::StartSprinting()
 	}
 	else
 	{
-		UseStamina(0);
+		if (CMC->IsMovingOnGround())
+		{
+			UseStamina(0);
+		}
 		CanReplenishStamina = false;
 		IsSprinting = true;
 		CMC->MaxWalkSpeed = PlayerData->SprintSpeed;
@@ -305,7 +392,6 @@ void AHorrorTemplateCharacter::StartSprinting()
 
 void AHorrorTemplateCharacter::StopSprinting()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, TEXT("StopSprinting"));
 	CanReplenishStamina = true;
 	IsSprinting = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
