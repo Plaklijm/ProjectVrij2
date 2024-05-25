@@ -62,7 +62,7 @@ class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterfa
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Settings, meta=(AllowPrivateAccess = "true"))
 	UPlayerDataAsset* PlayerData;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UCharacterMovementComponent* CMC;
 
 	UPROPERTY(VisibleAnywhere, Category=Movement)
