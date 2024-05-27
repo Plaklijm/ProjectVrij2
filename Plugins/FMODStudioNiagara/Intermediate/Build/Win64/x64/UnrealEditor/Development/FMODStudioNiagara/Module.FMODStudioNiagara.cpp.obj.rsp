@@ -1,11 +1,11 @@
-"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp"
-/FI"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h"
-/FI"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Definitions.FMODStudioNiagara.h"
-/Yu"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h"
-/Fp"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h.pch"
-/Fo"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp.obj"
-/sourceDependencies "C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp.dep.json"
-@"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\FMODStudioNiagara.Shared.rsp"
+"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp"
+/FI"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h"
+/FI"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Definitions.FMODStudioNiagara.h"
+/Yu"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h"
+/Fp"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h.pch"
+/Fo"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp.obj"
+/sourceDependencies "C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp.dep.json"
+@"C:\Users\ldsul\OneDrive\Documents\GitHub\ProjectVrij2\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\FMODStudioNiagara.Shared.rsp"
 /Zc:inline
 /nologo
 /Oi
