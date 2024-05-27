@@ -24,8 +24,14 @@ class HORRORTEMPLATE_API IInteractInterface
 public:
 
 	UFUNCTION(BlueprintNativeEvent, Category="Interact")
-	void Interact(AHorrorTemplateCharacter* player);
+	void Interact(AHorrorTemplateCharacter* player, float ElapsedSeconds);
 
 	UFUNCTION()
-	virtual void InteractPure(AHorrorTemplateCharacter* player) = 0;
+	virtual void InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds) = 0;
+	
+	UFUNCTION(BlueprintNativeEvent, Category="Interact")
+	void StopInteract(AHorrorTemplateCharacter* player);
+
+	UFUNCTION()
+	virtual void StopInteractPure(AHorrorTemplateCharacter* player) = 0;
 };

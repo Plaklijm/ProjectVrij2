@@ -24,31 +24,22 @@ void ASoup::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ASoup::Interact_Implementation(AHorrorTemplateCharacter* player)
+void ASoup::Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
-	IInteractInterface::Interact_Implementation(player);
+	IInteractInterface::Interact_Implementation(player, ElapsedSeconds);
 }
 
-void ASoup::InteractPure(AHorrorTemplateCharacter* player)
+void ASoup::InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
 	
 }
 
-void ASoup::FadeIn_Implementation()
+void ASoup::StopInteract_Implementation(AHorrorTemplateCharacter* player)
 {
-	IListenMechanic::FadeIn_Implementation();
+	IInteractInterface::StopInteract_Implementation(player);
 }
 
-void ASoup::FadeOut_Implementation()
-{
-	IListenMechanic::FadeOut_Implementation();
-}
-
-void ASoup::FadeInPure()
-{
-}
-
-void ASoup::FadeOutPure()
+void ASoup::StopInteractPure(AHorrorTemplateCharacter* player)
 {
 }
 

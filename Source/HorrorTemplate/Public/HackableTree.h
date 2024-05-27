@@ -24,6 +24,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void InteractPure(AHorrorTemplateCharacter* player) override;
-	virtual void Interact_Implementation(AHorrorTemplateCharacter* player) override;
+	virtual void InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds) override;
+	virtual void Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds) override;
+	
+	virtual void StopInteract_Implementation(AHorrorTemplateCharacter* player) override;
+
+	virtual void StopInteractPure(AHorrorTemplateCharacter* player) override;
 };

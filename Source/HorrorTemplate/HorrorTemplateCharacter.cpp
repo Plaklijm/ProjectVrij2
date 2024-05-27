@@ -7,6 +7,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "InputAction.h"
+#include "Components/InputComponent.h"
 #include "InputActionValue.h"
 #include "TeaseSystem.h"
 #include "Components/TimelineComponent.h"
@@ -82,9 +84,10 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	Mesh1P->CastShadow = false;
 	Mesh1P->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	Mesh1P->SetRelativeLocation(FVector(-5.f, 0.f, -155.f));
-
-
+	
 	CMC = GetCharacterMovement();
+
+	EnablePlayerInput = true;
 }
 
 bool AHorrorTemplateCharacter::CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation,
@@ -188,7 +191,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::StartSprinting);
+		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::StartSprinting);
 		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopSprinting);
 
 		// Crouching
@@ -208,8 +211,8 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		// Drink
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
 
-		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::StartAttack);
-		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::FinalizeAttack);
+		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
+		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
 	}
 	else
 	{
@@ -303,6 +306,8 @@ void AHorrorTemplateCharacter::StaminaAction(float StaminaCost)
 
 void AHorrorTemplateCharacter::Move(const FInputActionValue& Value)
 {
+	if (!EnablePlayerInput) return;
+	
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -316,6 +321,8 @@ void AHorrorTemplateCharacter::Move(const FInputActionValue& Value)
 
 void AHorrorTemplateCharacter::Look(const FInputActionValue& Value)
 {
+	if (!EnablePlayerInput) return;
+	
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -329,6 +336,8 @@ void AHorrorTemplateCharacter::Look(const FInputActionValue& Value)
 
 void AHorrorTemplateCharacter::CrouchLogic()
 {
+	if (!EnablePlayerInput) return;
+	
 	if (!IsCrouching)
 		StartCrouching();
 	else
@@ -337,6 +346,10 @@ void AHorrorTemplateCharacter::CrouchLogic()
 
 void AHorrorTemplateCharacter::StartCrouching()
 {
+	if (IsSprinting)
+	{
+		StopSprinting();
+	}
 	IsCrouching = true;
 	CMC->MaxWalkSpeed = PlayerData->CrouchSpeed;
 	FootstepInterval = PlayerData->CrouchFootstepInterval;
@@ -370,9 +383,11 @@ void AHorrorTemplateCharacter::TimeLineFinished() const
 
 void AHorrorTemplateCharacter::StartSprinting()
 {
+	if (!EnablePlayerInput) return;
+	
 	if (IsCrouching)
 		StopCrouching();
-	else if (PlayerData->Stamina <= 0)
+	if (PlayerData->Stamina <= 0)
 	{
 		StopSprinting();
 	}
@@ -400,27 +415,34 @@ void AHorrorTemplateCharacter::StopSprinting()
 
 void AHorrorTemplateCharacter::OnLeanLeft()
 {
+	if (!EnablePlayerInput) return;
+	
 	TargetCameraLocation = LeanLeft->GetRelativeLocation();
 	TargetRoll = 360 + LeanLeft->GetComponentRotation().Roll;
 }
 
 void AHorrorTemplateCharacter::OnLeanRight()
 {
-	if (InteractComponent->HitInteractable)
-	{
-		InteractComponent->InteractCast();
-	}
-	else
-	{
-		TargetCameraLocation = LeanRight->GetRelativeLocation();
-		TargetRoll = LeanRight->GetComponentRotation().Roll;
-	}
+	if (!EnablePlayerInput) return;
+	
+	TargetCameraLocation = LeanRight->GetRelativeLocation();
+	TargetRoll = LeanRight->GetComponentRotation().Roll;
 }
 
 void AHorrorTemplateCharacter::OnLeanCompleted()
 {
 	TargetCameraLocation = DefaultCameraLocation;
 	TargetRoll = 0;
+}
+
+void AHorrorTemplateCharacter::OnInteract(const FInputActionInstance& Instance)
+{
+	InteractComponent->InteractCast(Instance.GetElapsedTime());
+}
+
+void AHorrorTemplateCharacter::OnStopInteract()
+{
+	InteractComponent->StopInteractCast();
 }
 
 void AHorrorTemplateCharacter::UseStamina(float Amount)
@@ -449,6 +471,24 @@ void AHorrorTemplateCharacter::ReplenishStamina()
 			
 	}
 }
+
+/*float AHorrorTemplateCharacter::GetElapsedSeconds(UInputAction* action)
+{
+	auto enhancedInput = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(this());
+	if (enhancedInput)
+	{
+		auto playerInput = enhancedInput->GetPlayerInput();
+		if (playerInput)
+		{
+			auto actionData = playerInput->FindActionInstanceData(action);
+			if (actionData)
+			{
+				return actionData->GetElapsedTime();
+			}
+		}
+	}
+	return 0.f;
+}*/
 
 void AHorrorTemplateCharacter::StartAttack_Implementation()
 {
