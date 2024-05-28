@@ -3,6 +3,8 @@ DerivedDataCache
 Intermediate
 Saved
 Build/Mac
+Plugins/FMODStudio
+Plugins/FMODStudioNiagara
 .vscode
 .vs
 *.VC.db
