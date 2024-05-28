@@ -8,7 +8,5 @@
 /NODEFAULTLIB
 "C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Intermediate\Build\Win64\x64\HorrorTemplateEditor\Development\UnrealEd\SharedPCH.UnrealEd.Cpp20.h.obj"
 "C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Module.FMODStudioNiagara.cpp.obj"
-"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\FMODNiagaraEventPlayer.gen.cpp.obj"
-"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\FMODStudioNiagara.init.gen.cpp.obj"
 "C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\Default.rc2.res"
 /OUT:"C:\DEV\Unreal Projects\SCHOOL\HorrorTemplate\Plugins\FMODStudioNiagara\Intermediate\Build\Win64\x64\UnrealEditor\Development\FMODStudioNiagara\UnrealEditor-FMODStudioNiagara.lib"
