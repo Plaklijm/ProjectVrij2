@@ -24,31 +24,21 @@ void ACore::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ACore::Interact_Implementation(AHorrorTemplateCharacter* player)
+void ACore::Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
-	IInteractInterface::Interact_Implementation(player);
+	IInteractInterface::Interact_Implementation(player, ElapsedSeconds);
 }
 
-void ACore::InteractPure(AHorrorTemplateCharacter* player)
+void ACore::InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
 	
 }
 
-void ACore::FadeIn_Implementation()
+void ACore::StopInteract_Implementation(AHorrorTemplateCharacter* player)
 {
-	IListenMechanic::FadeIn_Implementation();
+	IInteractInterface::StopInteract_Implementation(player);
 }
 
-void ACore::FadeOut_Implementation()
-{
-	IListenMechanic::FadeOut_Implementation();
-}
-
-void ACore::FadeInPure()
+void ACore::StopInteractPure(AHorrorTemplateCharacter* player)
 {
 }
-
-void ACore::FadeOutPure()
-{
-}
-

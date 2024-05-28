@@ -24,34 +24,24 @@ void AJuice::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AJuice::Interact_Implementation(AHorrorTemplateCharacter* player)
+void AJuice::Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
-	IInteractInterface::Interact_Implementation(player);
-
-	GEngine->AddOnScreenDebugMessage( -1,1.0,FColor::Red, TEXT("Hello From C++ Juice"));
+	IInteractInterface::Interact_Implementation(player, ElapsedSeconds);
 }
 
-void AJuice::InteractPure(AHorrorTemplateCharacter* player)
+void AJuice::InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
 	
 }
 
-void AJuice::FadeIn_Implementation()
+void AJuice::StopInteract_Implementation(AHorrorTemplateCharacter* player)
 {
-	IListenMechanic::FadeIn_Implementation();
+	IInteractInterface::StopInteract_Implementation(player);
 }
 
-void AJuice::FadeOut_Implementation()
-{
-	IListenMechanic::FadeOut_Implementation();
-}
-
-void AJuice::FadeInPure()
+void AJuice::StopInteractPure(AHorrorTemplateCharacter* player)
 {
 }
 
-void AJuice::FadeOutPure()
-{
-}
 
 

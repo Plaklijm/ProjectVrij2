@@ -40,12 +40,21 @@ void AThrowableObject::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AThrowableObject::InteractPure(AHorrorTemplateCharacter* player)
+void AThrowableObject::InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
 }
 
-void AThrowableObject::Interact_Implementation(AHorrorTemplateCharacter* player)
+void AThrowableObject::Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
-	IInteractInterface::Interact_Implementation(player);
+	IInteractInterface::Interact_Implementation(player, ElapsedSeconds);
+}
+
+void AThrowableObject::StopInteract_Implementation(AHorrorTemplateCharacter* player)
+{
+	IInteractInterface::StopInteract_Implementation(player);
+}
+
+void AThrowableObject::StopInteractPure(AHorrorTemplateCharacter* player)
+{
 }
 

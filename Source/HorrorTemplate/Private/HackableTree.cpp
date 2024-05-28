@@ -24,12 +24,21 @@ void AHackableTree::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AHackableTree::InteractPure(AHorrorTemplateCharacter* player)
+void AHackableTree::InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
 }
 
-void AHackableTree::Interact_Implementation(AHorrorTemplateCharacter* player)
+void AHackableTree::Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds)
 {
-	IInteractInterface::Interact_Implementation(player);
+	IInteractInterface::Interact_Implementation(player, ElapsedSeconds);
+}
+
+void AHackableTree::StopInteract_Implementation(AHorrorTemplateCharacter* player)
+{
+	IInteractInterface::StopInteract_Implementation(player);
+}
+
+void AHackableTree::StopInteractPure(AHorrorTemplateCharacter* player)
+{
 }
 

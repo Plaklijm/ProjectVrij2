@@ -9,6 +9,8 @@
 #include "Public/Core.h"
 #include "HorrorTemplateCharacter.generated.h"
 
+struct FInputActionInstance;
+class UInputAction;
 class ULampComponent;
 class UTeaseSystem;
 class UPlayerDataAsset;
@@ -62,7 +64,7 @@ class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterfa
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Settings, meta=(AllowPrivateAccess = "true"))
 	UPlayerDataAsset* PlayerData;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UCharacterMovementComponent* CMC;
 
 	UPROPERTY(VisibleAnywhere, Category=Movement)
@@ -94,6 +96,9 @@ class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterfa
 	
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CrouchTimeLine;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	bool EnablePlayerInput;
 	
 public:
 	AHorrorTemplateCharacter();
@@ -125,6 +130,9 @@ protected:
 	void OnLeanLeft();
 	void OnLeanRight();
 	void OnLeanCompleted();
+
+	void OnInteract(const FInputActionInstance& Instance);
+	void OnStopInteract();
 
 	void UseStamina(float Amount);
 	void ReplenishStamina();

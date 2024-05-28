@@ -4,12 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "InteractInterface.h"
-#include "ListenMechanic.h"
 #include "GameFramework/Actor.h"
 #include "Core.generated.h"
 
 UCLASS()
-class HORRORTEMPLATE_API ACore : public AActor, public IInteractInterface, public IListenMechanic
+class HORRORTEMPLATE_API ACore : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
 
@@ -25,13 +24,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Interact_Implementation(AHorrorTemplateCharacter* player) override;
+	void Interact_Implementation(AHorrorTemplateCharacter* player, float ElapsedSeconds) override;
 	
-	virtual void InteractPure(AHorrorTemplateCharacter* player) override;
+	virtual void InteractPure(AHorrorTemplateCharacter* player, float ElapsedSeconds) override;
+	
+	virtual void StopInteract_Implementation(AHorrorTemplateCharacter* player) override;
 
-	void FadeIn_Implementation() override;
-	void FadeOut_Implementation() override;
-	
-		virtual void FadeInPure() override;
-    	virtual void FadeOutPure() override;
+	virtual void StopInteractPure(AHorrorTemplateCharacter* player) override;
 };

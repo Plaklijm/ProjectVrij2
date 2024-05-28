@@ -80,7 +80,7 @@ void UInteractComponent::SetPlayer(AHorrorTemplateCharacter* Player)
 	}
 }
 
-void UInteractComponent::InteractCast()
+void UInteractComponent::InteractCast(float ElapsedSeconds)
 {
 	if (HitInteractable)
 	{
@@ -98,8 +98,32 @@ void UInteractComponent::InteractCast()
 		
 			if (HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
 			{
-				Cast<IInteractInterface>(HitResult.GetActor())->InteractPure(Cast<AHorrorTemplateCharacter>(GetOwner()));
-				IInteractInterface::Execute_Interact(HitResult.GetActor(), Cast<AHorrorTemplateCharacter>(GetOwner()));
+				Cast<IInteractInterface>(HitResult.GetActor())->InteractPure(Cast<AHorrorTemplateCharacter>(GetOwner()), ElapsedSeconds);
+				IInteractInterface::Execute_Interact(HitResult.GetActor(), Cast<AHorrorTemplateCharacter>(GetOwner()), ElapsedSeconds);
 			}
+	}
+}
+
+void UInteractComponent::StopInteractCast()
+{
+	if (HitInteractable)
+	{
+		const FVector Start = FPController->PlayerCameraManager->GetCameraLocation();
+		FVector Rotation(FPController->GetControlRotation().Vector());
+		const FVector End = Rotation * 200.f + Start;
+	
+		TArray<AActor*> ActorsToIgnore;
+		ActorsToIgnore.Add(GetOwner());
+
+		FHitResult HitResult;
+	
+		UKismetSystemLibrary::SphereTraceSingle(GetWorld(), Start, End, 5, UEngineTypes::ConvertToTraceType(ECC_Camera),
+			false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true);
+		
+		if (HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
+		{
+			Cast<IInteractInterface>(HitResult.GetActor())->StopInteractPure(Cast<AHorrorTemplateCharacter>(GetOwner()));
+			IInteractInterface::Execute_StopInteract(HitResult.GetActor(), Cast<AHorrorTemplateCharacter>(GetOwner()));
+		}
 	}
 }
