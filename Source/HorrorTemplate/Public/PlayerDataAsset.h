@@ -80,35 +80,41 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Cores", meta=(AllowPrivateAccess = "true"))
 	TArray<ACore*> CollectedCores;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Juice|Player", meta=(AllowPrivateAccess = "true"))
 	float JuiceFlaskAmount = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Juice|Player", meta=(AllowPrivateAccess = "true"))
 	float JuiceConsumedAmount = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player", meta=(AllowPrivateAccess = "true"))
 	float JuiceMaxFlaskAmount = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player", meta=(AllowPrivateAccess = "true"))
 	float JuiceMaxConsumeAmount = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
-	float RootJuiceAddAmount = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Interactables", meta=(AllowPrivateAccess = "true"))
+	float RootJuiceTickAddAmount = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Interactables", meta=(AllowPrivateAccess = "true"))
 	float RootJuiceReplenishSpeedMultiplier = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player", meta=(AllowPrivateAccess = "true"))
 	float JuiceDrinkSpeedMultiplier = 3;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
 	float PassiveJuiceDiminishMultiplier;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
 	float SightJuiceDiminishMultiplier;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
 	float JuiceDiminishMultiplier;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
+	float InsanityCutoff;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
+	float InsanityTimer;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta=(AllowPrivateAccess = "true"))
 	FName AIVisionTargetBone = "head";

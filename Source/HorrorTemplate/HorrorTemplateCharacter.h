@@ -171,7 +171,10 @@ public:
 	void JuiceChunk(float amount);
 
 	UFUNCTION(BlueprintCallable)
-	bool ConsumeJuice() const;
+	int ConsumeJuice() const;
+
+	UFUNCTION(BlueprintCallable)
+	void HandleInsanity(int JuiceState) const;
 
 	UFUNCTION(BlueprintCallable)
 	void IsInSightJuiceDiminishChanger(bool IsInSight) const;

@@ -262,16 +262,40 @@ void AHorrorTemplateCharacter::JuiceChunk(float amount)
 	}
 }
 
-bool AHorrorTemplateCharacter::ConsumeJuice() const
+int AHorrorTemplateCharacter::ConsumeJuice() const
 {
+	PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
+
+	if (PlayerData->JuiceConsumedAmount <= PlayerData->InsanityCutoff && !(PlayerData->JuiceConsumedAmount <= 0))
+	{
+		return 1;
+	}
+	
 	if (PlayerData->JuiceConsumedAmount > 0)
 	{
-		PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
-		return false;
+		return 0;
 	}
-
+	
 	PlayerData->JuiceConsumedAmount = 0;
-	return true;
+	return 2;
+}
+
+void AHorrorTemplateCharacter::HandleInsanity(int JuiceState) const
+{
+	switch (JuiceState)
+	{
+	case 0:
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Green, TEXT("Normal"));
+		break;
+	case 1:
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Orange, TEXT("Starting To Go Insane"));
+		break;
+	case 2:
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, TEXT("INSANE"));
+		break;
+	default:
+		break;
+	}
 }
 
 void AHorrorTemplateCharacter::IsInSightJuiceDiminishChanger(bool IsInSight) const
@@ -302,7 +326,6 @@ void AHorrorTemplateCharacter::StaminaAction(float StaminaCost)
 		PlayerData->Stamina = 0;
 	}
 }
-
 
 void AHorrorTemplateCharacter::Move(const FInputActionValue& Value)
 {
