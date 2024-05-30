@@ -19,6 +19,7 @@
 #include "Public/PlayerDataAsset.h"
 #include "Components/SphereComponent.h"
 #include "Components/SceneComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -382,6 +383,16 @@ void AHorrorTemplateCharacter::StartCrouching()
 
 void AHorrorTemplateCharacter::StopCrouching()
 {
+	FHitResult OutHit;
+	auto Start = GetActorLocation();
+	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + GetDefaultHalfHeight());
+
+	DrawDebugSphere(GetWorld(), Start, GetCapsuleComponent()->GetScaledCapsuleRadius(), 32, FColor::Red, true, 10);
+	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
+		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Cyan, TEXT("HIT"));
+	}
 	IsCrouching = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	FootstepInterval = PlayerData->WalkFootstepInterval;
