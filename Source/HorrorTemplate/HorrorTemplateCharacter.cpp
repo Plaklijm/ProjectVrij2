@@ -267,13 +267,11 @@ int AHorrorTemplateCharacter::ConsumeJuice() const
 {
 	PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
 
-	if (PlayerData->JuiceConsumedAmount <= PlayerData->InsanityCutoff && !(PlayerData->JuiceConsumedAmount <= 0))
-	{
+	if (PlayerData->JuiceConsumedAmount <= PlayerData->InsanityCutoff && !(PlayerData->JuiceConsumedAmount <= 0)) {
 		return 1;
 	}
 	
-	if (PlayerData->JuiceConsumedAmount > 0)
-	{
+	if (PlayerData->JuiceConsumedAmount > 0) {
 		return 0;
 	}
 	
@@ -281,18 +279,24 @@ int AHorrorTemplateCharacter::ConsumeJuice() const
 	return 2;
 }
 
-void AHorrorTemplateCharacter::HandleInsanity(int JuiceState) const
+void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
 {
 	switch (JuiceState)
 	{
 	case 0:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Green, TEXT("Normal"));
+		FirstPersonCameraComponent->SetPostProcessBlendWeight(0);
+		GardenerEvent(false);
 		break;
 	case 1:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Orange, TEXT("Starting To Go Insane"));
+		const auto BlendWeight = (PlayerData->JuiceConsumedAmount/PlayerData->InsanityCutoff) * -1 + 1;
+		FirstPersonCameraComponent->SetPostProcessBlendWeight(BlendWeight);
+		GardenerEvent(true);
 		break;
 	case 2:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, TEXT("INSANE"));
+		FirstPersonCameraComponent->SetPostProcessBlendWeight(1);
 		break;
 	default:
 		break;
@@ -326,6 +330,15 @@ void AHorrorTemplateCharacter::StaminaAction(float StaminaCost)
 	{
 		PlayerData->Stamina = 0;
 	}
+}
+
+void AHorrorTemplateCharacter::SetIsInCave(bool NewValue)
+{
+	IsInCave = NewValue;
+}
+
+void AHorrorTemplateCharacter::GardenerEvent_Implementation(bool SetActive)
+{ 
 }
 
 void AHorrorTemplateCharacter::Move(const FInputActionValue& Value)

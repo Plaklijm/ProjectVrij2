@@ -99,6 +99,9 @@ class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterfa
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
 	bool EnablePlayerInput;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	bool IsInCave;
 	
 public:
 	AHorrorTemplateCharacter();
@@ -174,7 +177,7 @@ public:
 	int ConsumeJuice() const;
 
 	UFUNCTION(BlueprintCallable)
-	void HandleInsanity(int JuiceState) const;
+	void HandleInsanity(int JuiceState);
 
 	UFUNCTION(BlueprintCallable)
 	void IsInSightJuiceDiminishChanger(bool IsInSight) const;
@@ -184,6 +187,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StaminaAction(float StaminaCost);
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsInCave(bool NewValue);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void GardenerEvent(bool SetActive);
 	
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
