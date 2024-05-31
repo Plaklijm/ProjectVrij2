@@ -19,6 +19,7 @@
 #include "Public/PlayerDataAsset.h"
 #include "Components/SphereComponent.h"
 #include "Components/SceneComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -262,16 +263,44 @@ void AHorrorTemplateCharacter::JuiceChunk(float amount)
 	}
 }
 
-bool AHorrorTemplateCharacter::ConsumeJuice() const
+int AHorrorTemplateCharacter::ConsumeJuice() const
 {
-	if (PlayerData->JuiceConsumedAmount > 0)
-	{
-		PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
-		return false;
-	}
+	PlayerData->JuiceConsumedAmount -= GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDiminishMultiplier;
 
+	if (PlayerData->JuiceConsumedAmount <= PlayerData->InsanityCutoff && !(PlayerData->JuiceConsumedAmount <= 0)) {
+		return 1;
+	}
+	
+	if (PlayerData->JuiceConsumedAmount > 0) {
+		return 0;
+	}
+	
 	PlayerData->JuiceConsumedAmount = 0;
-	return true;
+	return 2;
+}
+
+void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
+{
+		const auto BlendWeight = (PlayerData->JuiceConsumedAmount/PlayerData->InsanityCutoff) * -1 + 1;
+	switch (JuiceState)
+	{
+	case 0:
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Green, TEXT("Normal"));
+		FirstPersonCameraComponent->SetPostProcessBlendWeight(0);
+		GardenerEvent(false);
+		break;
+	case 1:
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Orange, TEXT("Starting To Go Insane"));
+		FirstPersonCameraComponent->SetPostProcessBlendWeight(BlendWeight);
+		GardenerEvent(true);
+		break;
+	case 2:
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, TEXT("INSANE"));
+		FirstPersonCameraComponent->SetPostProcessBlendWeight(1);
+		break;
+	default:
+		break;
+	}
 }
 
 void AHorrorTemplateCharacter::IsInSightJuiceDiminishChanger(bool IsInSight) const
@@ -303,6 +332,14 @@ void AHorrorTemplateCharacter::StaminaAction(float StaminaCost)
 	}
 }
 
+void AHorrorTemplateCharacter::SetIsInCave(bool NewValue)
+{
+	IsInCave = NewValue;
+}
+
+void AHorrorTemplateCharacter::GardenerEvent_Implementation(bool SetActive)
+{ 
+}
 
 void AHorrorTemplateCharacter::Move(const FInputActionValue& Value)
 {
@@ -359,6 +396,15 @@ void AHorrorTemplateCharacter::StartCrouching()
 
 void AHorrorTemplateCharacter::StopCrouching()
 {
+	FHitResult OutHit;
+	auto Start = GetActorLocation();
+	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + PlayerHeight*2);
+	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
+		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
+	{
+		return;
+	}
+	
 	IsCrouching = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
 	FootstepInterval = PlayerData->WalkFootstepInterval;
@@ -391,7 +437,7 @@ void AHorrorTemplateCharacter::StartSprinting()
 	{
 		StopSprinting();
 	}
-	else
+	else if (!IsCrouching)
 	{
 		if (CMC->IsMovingOnGround())
 		{
