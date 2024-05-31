@@ -281,6 +281,7 @@ int AHorrorTemplateCharacter::ConsumeJuice() const
 
 void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
 {
+		const auto BlendWeight = (PlayerData->JuiceConsumedAmount/PlayerData->InsanityCutoff) * -1 + 1;
 	switch (JuiceState)
 	{
 	case 0:
@@ -290,7 +291,6 @@ void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
 		break;
 	case 1:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Orange, TEXT("Starting To Go Insane"));
-		const auto BlendWeight = (PlayerData->JuiceConsumedAmount/PlayerData->InsanityCutoff) * -1 + 1;
 		FirstPersonCameraComponent->SetPostProcessBlendWeight(BlendWeight);
 		GardenerEvent(true);
 		break;
