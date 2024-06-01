@@ -32,6 +32,9 @@ class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterfa
 {
 	GENERATED_BODY()
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Ability, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* PlayerRootComponent;
+
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category=Mesh, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh1P;
@@ -72,6 +75,9 @@ class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterfa
 	
 	UPROPERTY(VisibleAnywhere, Category=Movement)
 	float CrouchHeight;
+
+	UPROPERTY(VisibleAnywhere, Category=Movement)
+	float NewHeight;
 
 	UPROPERTY(VisibleAnywhere, Category=Movement)
 	bool CanReplenishStamina;
@@ -147,7 +153,7 @@ protected:
 	void FinalizeAttack();
 	
 	UFUNCTION()
-	void TimeLineProgress(float Value) const;
+	void TimeLineProgress(float Value);
 
 	UFUNCTION()
 	void TimeLineFinished() const;

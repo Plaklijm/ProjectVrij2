@@ -10,6 +10,7 @@
 #include "InputAction.h"
 #include "Components/InputComponent.h"
 #include "InputActionValue.h"
+#include "KismetTraceUtils.h"
 #include "TeaseSystem.h"
 #include "Components/TimelineComponent.h"
 #include "Engine/LocalPlayer.h"
@@ -397,13 +398,15 @@ void AHorrorTemplateCharacter::StartCrouching()
 void AHorrorTemplateCharacter::StopCrouching()
 {
 	FHitResult OutHit;
-	auto Start = GetActorLocation();
-	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + PlayerHeight*2);
+	auto Start = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z);
+	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight);
+	DrawDebugSweptSphere(GetWorld(), Start, End, GetCapsuleComponent()->GetScaledCapsuleRadius(), FColor::Red, true, 10);
 	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
 		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
 	{
 		return;
 	}
+	
 	
 	IsCrouching = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
@@ -413,10 +416,10 @@ void AHorrorTemplateCharacter::StopCrouching()
 }
 
 
-void AHorrorTemplateCharacter::TimeLineProgress(float Value) const
+void AHorrorTemplateCharacter::TimeLineProgress(float Value)
 {
-	const float newHeight = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
-	GetCapsuleComponent()->SetCapsuleHalfHeight(newHeight);
+	NewHeight = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(NewHeight);
 }
 
 void AHorrorTemplateCharacter::TimeLineFinished() const
