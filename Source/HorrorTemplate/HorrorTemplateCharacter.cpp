@@ -399,7 +399,7 @@ void AHorrorTemplateCharacter::StopCrouching()
 {
 	FHitResult OutHit;
 	auto Start = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z);
-	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight);
+	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight + 20);
 	DrawDebugSweptSphere(GetWorld(), Start, End, GetCapsuleComponent()->GetScaledCapsuleRadius(), FColor::Red, true, 10);
 	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
 		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
@@ -418,8 +418,9 @@ void AHorrorTemplateCharacter::StopCrouching()
 
 void AHorrorTemplateCharacter::TimeLineProgress(float Value)
 {
-	NewHeight = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
-	GetCapsuleComponent()->SetCapsuleHalfHeight(NewHeight);
+	NewHeight = FMath::Lerp(CrouchHeight, PlayerHeight, Value);
+	const auto temp = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(temp);
 }
 
 void AHorrorTemplateCharacter::TimeLineFinished() const
