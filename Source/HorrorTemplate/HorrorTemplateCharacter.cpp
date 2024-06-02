@@ -92,39 +92,6 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	EnablePlayerInput = true;
 }
 
-bool AHorrorTemplateCharacter::CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation,
-	int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor, const bool* bWasVisible,
-	int32* UserData) const
-{
-	static const FName NAME_AILineOfSight = FName(TEXT("TestPawnLineOfSight"));
-	FHitResult HitResult;
-
-	FVector SocketLocation = GetMesh1P()->GetSocketLocation(PlayerData->AIVisionTargetBone);
-
-	const bool bHitSocket = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, SocketLocation,
-		FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
-	NumberOfLoSChecksPerformed++;
-	if (bHitSocket == false || (IsValid(HitResult.GetActor()) && HitResult.GetActor()->IsOwnedBy(this)))
-	{
-		OutSeenLocation = SocketLocation;
-		OutSightStrength = 1;
-		return true;
-	}
-
-	const bool bHit = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, GetActorLocation(),
-		FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
-	NumberOfLoSChecksPerformed++;
-	if (bHit == false || (IsValid(HitResult.GetActor()) && HitResult.GetActor()->IsOwnedBy(this)))
-	{
-		OutSeenLocation = GetActorLocation();
-		OutSightStrength = 1;
-		return true;
-	}
-
-	OutSightStrength = 0;
-	return false;
-}
-
 void AHorrorTemplateCharacter::BeginPlay()
 {
 	// Call the base class  

@@ -112,12 +112,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
 	float InsanityCutoff;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
-	float InsanityTimer;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta=(AllowPrivateAccess = "true"))
-	FName AIVisionTargetBone = "head";
 public:
 	UPlayerDataAsset() = default;
 };
