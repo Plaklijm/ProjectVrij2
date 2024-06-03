@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{0bf71147-ef3f-427d-ac79-e7c984335d86}">
+		<property name="assetPath">
+			<value>CUFX05 - Element 04 - Small Hammer - Dry.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>3.75</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e917ee22-dc14-412b-810f-86972287131e}</destination>
+		</relationship>
+	</object>
+</objects>
