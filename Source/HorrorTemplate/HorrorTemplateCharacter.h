@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Public/Core.h"
+#include "Materials/MaterialParameterCollection.h"
 #include "HorrorTemplateCharacter.generated.h"
 
 struct FInputActionInstance;
@@ -172,6 +173,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DrinkJuice();
+
+	void StopDrinking();
 
 	UFUNCTION(BlueprintCallable)
 	void JuiceChunk(float amount);

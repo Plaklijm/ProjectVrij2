@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Core.h"
 #include "Engine/DataAsset.h"
+#include "Materials/MaterialParameterCollection.h"
 #include "PlayerDataAsset.generated.h"
+
 
 class UInputAction;
 class UInputMappingContext;
@@ -43,6 +45,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
+	UInputAction* EquipTap;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
+	UInputAction* EquipFlask;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
 	float WalkSpeed;
@@ -107,11 +115,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
 	float SightJuiceDiminishMultiplier;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
 	float JuiceDiminishMultiplier;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Stealth", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Insanity", meta=(AllowPrivateAccess = "true"))
 	float InsanityCutoff;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Insanity", meta=(AllowPrivateAccess = "true"))
+	UMaterialParameterCollection* InsanityMPC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Juice|Player|Insanity", meta=(AllowPrivateAccess = "true"))
+	FName TreeScalarName;
 	
 public:
 	UPlayerDataAsset() = default;
