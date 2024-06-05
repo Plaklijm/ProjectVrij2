@@ -5,7 +5,7 @@
 			<value>blaze</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{eb373f10-8926-4f7e-b9fc-906030d985b0}</destination>
@@ -120,9 +120,11 @@
 	<object class="MixerBusEffectChain" id="{d2a07ef3-ccfb-4408-916a-9f4e90612a27}">
 		<relationship name="effects">
 			<destination>{66aed5bc-6a76-4260-b108-6589207807eb}</destination>
+			<destination>{0ed4c9d3-412a-4c9f-b242-8fa2b4e185a3}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{668267d7-87e4-4cb9-81bc-4455815a1b9e}" />
 	<object class="MixerBusFader" id="{7ea94109-4778-4a6e-9641-dc6330e42d0f}" />
 	<object class="MixerBusFader" id="{66aed5bc-6a76-4260-b108-6589207807eb}" />
+	<object class="SpatialiserEffect" id="{0ed4c9d3-412a-4c9f-b242-8fa2b4e185a3}" />
 </objects>

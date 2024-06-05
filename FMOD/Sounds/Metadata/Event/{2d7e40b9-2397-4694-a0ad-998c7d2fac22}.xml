@@ -5,7 +5,7 @@
 			<value>saptap</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{eb373f10-8926-4f7e-b9fc-906030d985b0}</destination>
@@ -130,6 +130,7 @@
 	<object class="MixerBusEffectChain" id="{ce959725-2620-4f0b-bdf2-bbe3beba8d61}">
 		<relationship name="effects">
 			<destination>{2eb3d277-ea1a-452d-815f-818755149a01}</destination>
+			<destination>{bd22ba82-6aa2-4134-bd62-69d779f61334}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{ce22b67d-e9d6-4a30-9ab7-01f25644adcd}" />
@@ -141,5 +142,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{e4496b7c-d576-426b-b337-37fa32e6a0eb}" />
 	<object class="MixerBusFader" id="{2eb3d277-ea1a-452d-815f-818755149a01}" />
+	<object class="SpatialiserEffect" id="{bd22ba82-6aa2-4134-bd62-69d779f61334}" />
 	<object class="MixerBusFader" id="{b334df1a-3951-463e-8c92-c7400fa5d2b5}" />
 </objects>
