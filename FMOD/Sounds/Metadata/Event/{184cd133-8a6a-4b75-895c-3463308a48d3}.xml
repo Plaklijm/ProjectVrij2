@@ -5,7 +5,7 @@
 			<value>tap</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{eb373f10-8926-4f7e-b9fc-906030d985b0}</destination>
@@ -113,6 +113,7 @@
 	<object class="MixerBusEffectChain" id="{e85abd5b-1df5-4586-8ddf-51ebdec63787}">
 		<relationship name="effects">
 			<destination>{1c9e249a-9f3b-4673-82c0-4ed923e41bb2}</destination>
+			<destination>{0c051557-8988-40dd-8c1b-4feeae6449c1}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{e5066e95-23f3-4358-b12e-02bdf148a682}" />
@@ -124,5 +125,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{30800004-d32b-4dec-872e-dd463ce3fc5b}" />
 	<object class="MixerBusFader" id="{1c9e249a-9f3b-4673-82c0-4ed923e41bb2}" />
+	<object class="SpatialiserEffect" id="{0c051557-8988-40dd-8c1b-4feeae6449c1}" />
 	<object class="MixerBusFader" id="{e78e84eb-c5e9-4f06-8a59-93a8ca98c27e}" />
 </objects>

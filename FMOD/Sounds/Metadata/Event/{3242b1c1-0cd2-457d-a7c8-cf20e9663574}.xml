@@ -5,7 +5,7 @@
 			<value>item_equip_unequip</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{eb373f10-8926-4f7e-b9fc-906030d985b0}</destination>
@@ -120,9 +120,11 @@
 	<object class="MixerBusEffectChain" id="{405bac48-c334-40c2-bd3b-3bbc11e6866c}">
 		<relationship name="effects">
 			<destination>{6458cb65-dd19-470a-a3ab-9f61ed3173ba}</destination>
+			<destination>{d15dadf2-4fc7-4037-b838-1b5682999c91}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{c92f8945-c85f-42a1-b713-ccd7ea6c847a}" />
 	<object class="MixerBusFader" id="{07681f5e-1350-4b67-96ba-01e71792a0a4}" />
 	<object class="MixerBusFader" id="{6458cb65-dd19-470a-a3ab-9f61ed3173ba}" />
+	<object class="SpatialiserEffect" id="{d15dadf2-4fc7-4037-b838-1b5682999c91}" />
 </objects>

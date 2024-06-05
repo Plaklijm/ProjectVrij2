@@ -5,7 +5,7 @@
 			<value>stone_hits_floor</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{eb373f10-8926-4f7e-b9fc-906030d985b0}</destination>
@@ -113,6 +113,7 @@
 	<object class="MixerBusEffectChain" id="{dc17fe3d-f103-4da4-b3a6-2dba3399d434}">
 		<relationship name="effects">
 			<destination>{08b87d63-840b-40cf-9b1f-d830dbb16345}</destination>
+			<destination>{fb7f2403-8169-46c1-8d36-b2ab36751516}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{cd9decac-ab68-446c-9054-09455e21e3c2}" />
@@ -124,5 +125,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{12f090b8-c234-4150-8fc3-31ac4d577143}" />
 	<object class="MixerBusFader" id="{08b87d63-840b-40cf-9b1f-d830dbb16345}" />
+	<object class="SpatialiserEffect" id="{fb7f2403-8169-46c1-8d36-b2ab36751516}" />
 	<object class="MixerBusFader" id="{86430475-e866-4f7a-82de-610f05ca2ab4}" />
 </objects>

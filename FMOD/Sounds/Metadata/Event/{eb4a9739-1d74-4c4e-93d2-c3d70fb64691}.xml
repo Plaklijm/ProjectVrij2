@@ -277,7 +277,6 @@
 		<property name="timelockedOffset">
 			<value>3.2022021503560865</value>
 		</property>
-		<property name="name" />
 		<relationship name="audioFile">
 			<destination>{d4444d3b-c597-4988-9fcc-4bd2dbd353c0}</destination>
 		</relationship>
@@ -548,6 +547,7 @@
 			<destination>{b2ceeb21-5916-4e27-884a-596290a08080}</destination>
 			<destination>{77f28f5e-8de0-4422-99b3-0871b9745d5b}</destination>
 			<destination>{99671ec9-da77-4c5d-8997-b58b9ca1cf5a}</destination>
+			<destination>{41476801-ef05-43c3-9d9d-c0e7f305cc3b}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{8360f973-0c4a-4ac6-b6b0-682231566255}" />
@@ -840,6 +840,7 @@
 			<destination>{65757766-38ba-422d-8138-8c5abb5cd8b9}</destination>
 		</relationship>
 	</object>
+	<object class="SpatialiserEffect" id="{41476801-ef05-43c3-9d9d-c0e7f305cc3b}" />
 	<object class="MixerBusFader" id="{e8579cb0-136e-4ef4-b086-6de7619be697}" />
 	<object class="MixerBusFader" id="{efb1fa09-d2b9-4de5-bf3d-3d9f5da72baf}" />
 	<object class="MixerBusFader" id="{c5e4f9f0-38ea-444f-9660-07210dbed415}" />
