@@ -184,6 +184,9 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
 		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
+
+		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::EquipFlask);
+		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::UnEquipFlask);
 	}
 	else
 	{
@@ -213,6 +216,8 @@ void AHorrorTemplateCharacter::AddJuice(float amount)
 
 void AHorrorTemplateCharacter::DrinkJuice()
 {
+	if (!CanDrink) return;
+	
 	if (PlayerData->JuiceFlaskAmount > 0 && PlayerData->JuiceConsumedAmount < PlayerData->JuiceMaxConsumeAmount)
 	{
 		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
@@ -412,6 +417,7 @@ void AHorrorTemplateCharacter::TimeLineFinished() const
 void AHorrorTemplateCharacter::StartSprinting()
 {
 	if (!EnablePlayerInput) return;
+	if (!CanSprint) return;
 	
 	if (IsCrouching)
 		StopCrouching();
@@ -498,6 +504,28 @@ void AHorrorTemplateCharacter::ReplenishStamina()
 		}
 			
 	}
+}
+
+void AHorrorTemplateCharacter::EquipFlaskBP_Implementation()
+{
+}
+
+void AHorrorTemplateCharacter::EquipFlask()
+{
+	CanSprint = false;
+	CanDrink = false;
+	EquipFlaskBP_Implementation();
+}
+
+void AHorrorTemplateCharacter::UnEquipFlaskBP_Implementation()
+{
+}
+
+void AHorrorTemplateCharacter::UnEquipFlask()
+{
+	CanSprint = true;
+	CanDrink = true;
+	UnEquipFlaskBP_Implementation();
 }
 
 /*float AHorrorTemplateCharacter::GetElapsedSeconds(UInputAction* action)

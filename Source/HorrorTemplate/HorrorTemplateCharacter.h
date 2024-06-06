@@ -108,6 +108,9 @@ class AHorrorTemplateCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	bool IsInCave;
+
+	bool CanSprint;
+	bool CanDrink;
 	
 public:
 	AHorrorTemplateCharacter();
@@ -144,6 +147,13 @@ protected:
 	void UseStamina(float Amount);
 	void ReplenishStamina();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void EquipFlaskBP();
+	void EquipFlask();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void UnEquipFlaskBP();
+	void UnEquipFlask();
 	UFUNCTION(BlueprintNativeEvent)
 	void StartAttack();
 
