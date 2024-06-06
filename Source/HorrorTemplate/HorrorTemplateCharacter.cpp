@@ -21,6 +21,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/SceneComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Materials/MaterialParameterCollectionInstance.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -90,39 +91,6 @@ AHorrorTemplateCharacter::AHorrorTemplateCharacter()
 	CMC = GetCharacterMovement();
 
 	EnablePlayerInput = true;
-}
-
-bool AHorrorTemplateCharacter::CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation,
-	int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor, const bool* bWasVisible,
-	int32* UserData) const
-{
-	static const FName NAME_AILineOfSight = FName(TEXT("TestPawnLineOfSight"));
-	FHitResult HitResult;
-
-	FVector SocketLocation = GetMesh1P()->GetSocketLocation(PlayerData->AIVisionTargetBone);
-
-	const bool bHitSocket = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, SocketLocation,
-		FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
-	NumberOfLoSChecksPerformed++;
-	if (bHitSocket == false || (IsValid(HitResult.GetActor()) && HitResult.GetActor()->IsOwnedBy(this)))
-	{
-		OutSeenLocation = SocketLocation;
-		OutSightStrength = 1;
-		return true;
-	}
-
-	const bool bHit = GetWorld()->LineTraceSingleByObjectType(HitResult, ObserverLocation, GetActorLocation(),
-		FCollisionObjectQueryParams(ECC_TO_BITFIELD(ECC_WorldStatic) | ECC_TO_BITFIELD(ECC_WorldDynamic)), FCollisionQueryParams(NAME_AILineOfSight, true, IgnoreActor));
-	NumberOfLoSChecksPerformed++;
-	if (bHit == false || (IsValid(HitResult.GetActor()) && HitResult.GetActor()->IsOwnedBy(this)))
-	{
-		OutSeenLocation = GetActorLocation();
-		OutSightStrength = 1;
-		return true;
-	}
-
-	OutSightStrength = 0;
-	return false;
 }
 
 void AHorrorTemplateCharacter::BeginPlay()
@@ -212,6 +180,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->InteractAndLeanRightAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
 		// Drink
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
+		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopDrinking);
 
 		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
 		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
@@ -249,7 +218,13 @@ void AHorrorTemplateCharacter::DrinkJuice()
 		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
 		PlayerData->JuiceFlaskAmount -= temp;
 		PlayerData->JuiceConsumedAmount += temp;
+		CMC->SetMovementMode(MOVE_None);
 	}
+}
+
+void AHorrorTemplateCharacter::StopDrinking()
+{
+	CMC->SetMovementMode(MOVE_Walking);
 }
 
 void AHorrorTemplateCharacter::JuiceChunk(float amount)
@@ -282,22 +257,26 @@ int AHorrorTemplateCharacter::ConsumeJuice() const
 
 void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
 {
-		const auto BlendWeight = (PlayerData->JuiceConsumedAmount/PlayerData->InsanityCutoff) * -1 + 1;
+	const auto BlendWeight = (PlayerData->JuiceConsumedAmount/PlayerData->InsanityCutoff) * -1 + 1;
+	UMaterialParameterCollectionInstance* PCI = GetWorld()->GetParameterCollectionInstance(PlayerData->InsanityMPC);
 	switch (JuiceState)
 	{
 	case 0:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Green, TEXT("Normal"));
 		FirstPersonCameraComponent->SetPostProcessBlendWeight(0);
+		PCI->SetScalarParameterValue(PlayerData->TreeScalarName, 0);
 		GardenerEvent(false);
 		break;
 	case 1:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Orange, TEXT("Starting To Go Insane"));
 		FirstPersonCameraComponent->SetPostProcessBlendWeight(BlendWeight);
+		PCI->SetScalarParameterValue(PlayerData->TreeScalarName, BlendWeight);
 		GardenerEvent(true);
 		break;
 	case 2:
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, TEXT("INSANE"));
 		FirstPersonCameraComponent->SetPostProcessBlendWeight(1);
+		PCI->SetScalarParameterValue(PlayerData->TreeScalarName, 1);
 		break;
 	default:
 		break;
@@ -399,14 +378,13 @@ void AHorrorTemplateCharacter::StopCrouching()
 {
 	FHitResult OutHit;
 	auto Start = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z);
-	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight);
+	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight + 20);
 	DrawDebugSweptSphere(GetWorld(), Start, End, GetCapsuleComponent()->GetScaledCapsuleRadius(), FColor::Red, true, 10);
 	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
 		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
 	{
 		return;
 	}
-	
 	
 	IsCrouching = false;
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
@@ -418,8 +396,9 @@ void AHorrorTemplateCharacter::StopCrouching()
 
 void AHorrorTemplateCharacter::TimeLineProgress(float Value)
 {
-	NewHeight = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
-	GetCapsuleComponent()->SetCapsuleHalfHeight(NewHeight);
+	NewHeight = FMath::Lerp(CrouchHeight, PlayerHeight, Value);
+	const auto temp = FMath::Lerp(PlayerHeight, CrouchHeight, Value);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(temp);
 }
 
 void AHorrorTemplateCharacter::TimeLineFinished() const

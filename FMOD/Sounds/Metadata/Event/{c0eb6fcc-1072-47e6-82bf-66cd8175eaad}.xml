@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{c0eb6fcc-1072-47e6-82bf-66cd8175eaad}">
 		<property name="name">
-			<value>Footstep</value>
+			<value>player_footsteps</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -30,6 +30,9 @@
 		</relationship>
 		<relationship name="timeline">
 			<destination>{bebb3cbf-9b79-413c-bed8-5c4eb3da0a87}</destination>
+		</relationship>
+		<relationship name="banks">
+			<destination>{f45df3fd-8149-4d8a-91e5-b455153cf2ea}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{3f9808a4-545a-468e-9cd5-7cb14fdd9939}">
@@ -93,7 +96,7 @@
 			<value>0.5</value>
 		</property>
 		<property name="startOffset">
-			<value>7</value>
+			<value>12</value>
 		</property>
 		<property name="playlistMode">
 			<value>1</value>
@@ -114,6 +117,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{9bfaabb2-cb19-4382-a889-faa79233d558}">
+		<property name="volume">
+			<value>-8.5</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>
