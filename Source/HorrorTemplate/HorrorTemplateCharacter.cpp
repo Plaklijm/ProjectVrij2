@@ -122,6 +122,9 @@ void AHorrorTemplateCharacter::BeginPlay()
 	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
 	TargetCameraLocation = DefaultCameraLocation;
 
+	CanSprint = true;
+	CanDrink = true;
+
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
 
