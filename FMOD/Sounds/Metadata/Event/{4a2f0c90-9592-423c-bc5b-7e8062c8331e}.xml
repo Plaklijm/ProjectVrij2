@@ -5,7 +5,7 @@
 			<value>gardener_footsteps</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{f9b313db-f7c0-4fb6-8a49-5db32b8e9d5a}</destination>
@@ -172,9 +172,8 @@
 		<relationship name="effects">
 			<destination>{c20f3328-16f0-483b-bccb-cee6b23638dc}</destination>
 			<destination>{a14f6547-d90a-49c3-b93d-b6a79487a345}</destination>
-			<destination>{5170953c-4f6a-4451-b4b4-539b653627e1}</destination>
 			<destination>{679299ca-a038-4b22-8692-85cb1a1b70cf}</destination>
-			<destination>{5e0b0dea-9c7d-478b-9189-80893cc1d428}</destination>
+			<destination>{01cddba1-1504-474b-b738-ec2b433f7643}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{0a0857d7-d54b-4cac-9a21-a2e81af4c5c6}" />
@@ -200,15 +199,10 @@
 	</object>
 	<object class="MixerBusFader" id="{c20f3328-16f0-483b-bccb-cee6b23638dc}" />
 	<object class="PitchShifterEffect" id="{a14f6547-d90a-49c3-b93d-b6a79487a345}" />
-	<object class="SFXReverbEffect" id="{5170953c-4f6a-4451-b4b4-539b653627e1}">
-		<property name="decayTime">
-			<value>4300</value>
-		</property>
-	</object>
 	<object class="ThreeEQEffect" id="{679299ca-a038-4b22-8692-85cb1a1b70cf}">
 		<property name="lowGain">
-			<value>10</value>
+			<value>5</value>
 		</property>
 	</object>
-	<object class="SpatialiserEffect" id="{5e0b0dea-9c7d-478b-9189-80893cc1d428}" />
+	<object class="ObjectSpatialiserEffect" id="{01cddba1-1504-474b-b738-ec2b433f7643}" />
 </objects>
