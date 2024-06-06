@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Perception/AISightTargetInterface.h"
 #include "Public/Core.h"
-#include "Materials/MaterialParameterCollection.h"
 #include "HorrorTemplateCharacter.generated.h"
 
 struct FInputActionInstance;
@@ -28,7 +28,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AHorrorTemplateCharacter : public ACharacter
+class AHorrorTemplateCharacter : public ACharacter, public IAISightTargetInterface
 {
 	GENERATED_BODY()
 
@@ -112,6 +112,8 @@ class AHorrorTemplateCharacter : public ACharacter
 public:
 	AHorrorTemplateCharacter();
 
+	virtual bool CanBeSeenFrom(const FVector& ObserverLocation, FVector& OutSeenLocation, int32& NumberOfLoSChecksPerformed, float& OutSightStrength, const AActor* IgnoreActor, const bool* bWasVisible, int32* UserData) const;
+
 protected:
 	virtual void BeginPlay();
 
@@ -173,8 +175,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DrinkJuice();
-
-	void StopDrinking();
 
 	UFUNCTION(BlueprintCallable)
 	void JuiceChunk(float amount);
