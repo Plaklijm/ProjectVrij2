@@ -5,7 +5,7 @@
 			<value>pickup_stone</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{eb373f10-8926-4f7e-b9fc-906030d985b0}</destination>
@@ -113,7 +113,7 @@
 	<object class="MixerBusEffectChain" id="{5ba78dff-592e-4583-964d-cf0b6134d158}">
 		<relationship name="effects">
 			<destination>{d17f9acb-ddaa-4f30-8315-cea934cd09fc}</destination>
-			<destination>{b64ebccd-a1fc-4f8d-b27e-88e2a83ae49a}</destination>
+			<destination>{de1bfb67-46fe-4694-b9ac-080a1bb51079}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{3a6dce84-a549-447d-b4b6-e99f7d844126}" />
@@ -125,6 +125,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{68ae1941-4358-48a6-b632-4a3d699b05d9}" />
 	<object class="MixerBusFader" id="{d17f9acb-ddaa-4f30-8315-cea934cd09fc}" />
-	<object class="SpatialiserEffect" id="{b64ebccd-a1fc-4f8d-b27e-88e2a83ae49a}" />
+	<object class="ObjectSpatialiserEffect" id="{de1bfb67-46fe-4694-b9ac-080a1bb51079}" />
 	<object class="MixerBusFader" id="{a07ddeba-c597-47e2-9f1e-1b4ed68b0143}" />
 </objects>
