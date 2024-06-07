@@ -179,14 +179,14 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->LeanLeftAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::OnLeanLeft);
 		EnhancedInputComponent->BindAction(PlayerData->LeanLeftAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
 		// Interact
-		EnhancedInputComponent->BindAction(PlayerData->InteractAndLeanRightAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::OnLeanRight);
-		EnhancedInputComponent->BindAction(PlayerData->InteractAndLeanRightAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
+		EnhancedInputComponent->BindAction(PlayerData->LeanRightAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::OnLeanRight);
+		EnhancedInputComponent->BindAction(PlayerData->LeanRightAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnLeanCompleted);
 		// Drink
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::DrinkJuice);
 		EnhancedInputComponent->BindAction(PlayerData->DrinkAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopDrinking);
 
-		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
-		EnhancedInputComponent->BindAction(PlayerData->AttackAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
+		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
+		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
 
 		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::EquipFlask);
 		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::UnEquipFlask);
@@ -385,9 +385,9 @@ void AHorrorTemplateCharacter::StartCrouching()
 void AHorrorTemplateCharacter::StopCrouching()
 {
 	FHitResult OutHit;
-	auto Start = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z);
-	auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight + 20);
-	DrawDebugSweptSphere(GetWorld(), Start, End, GetCapsuleComponent()->GetScaledCapsuleRadius(), FColor::Red, true, 10);
+	const auto Start = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z);
+	const auto End = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + NewHeight + 20);
+	
 	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
 		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
 	{

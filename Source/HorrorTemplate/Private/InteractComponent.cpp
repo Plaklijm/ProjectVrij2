@@ -4,6 +4,7 @@
 #include "HorrorTemplate/Public/InteractComponent.h"
 
 #include "InteractInterface.h"
+#include "KismetTraceUtils.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/Actor.h"
 #include "HorrorTemplate/HorrorTemplateCharacter.h"
@@ -92,15 +93,27 @@ void UInteractComponent::InteractCast(float ElapsedSeconds)
 		ActorsToIgnore.Add(GetOwner());
 
 		FHitResult HitResult;
-	
-		UKismetSystemLibrary::SphereTraceSingle(GetWorld(), Start, End, 5, UEngineTypes::ConvertToTraceType(ECC_Camera),
-			false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true);
 		
+		DrawDebugSweptSphere(GetWorld(), Start, End, 5, FColor::Purple, true);
+		
+		if (UKismetSystemLibrary::SphereTraceSingle(GetWorld(), Start, End, 5, UEngineTypes::ConvertToTraceType(ECC_Camera),
+			false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true))
+		{
 			if (HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractInterface::StaticClass()))
 			{
 				Cast<IInteractInterface>(HitResult.GetActor())->InteractPure(Cast<AHorrorTemplateCharacter>(GetOwner()), ElapsedSeconds);
 				IInteractInterface::Execute_Interact(HitResult.GetActor(), Cast<AHorrorTemplateCharacter>(GetOwner()), ElapsedSeconds);
 			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, TEXT("IteractInterface Not Found"));
+			}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, TEXT("Sphere Trace came back empty"));
+		}
+		
 	}
 }
 
