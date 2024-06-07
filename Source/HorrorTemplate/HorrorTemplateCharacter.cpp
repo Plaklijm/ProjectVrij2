@@ -188,7 +188,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
 
-		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::EquipFlask);
+		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::EquipFlask);
 		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::UnEquipFlask);
 	}
 	else
