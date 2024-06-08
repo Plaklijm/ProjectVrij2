@@ -81,7 +81,7 @@ void UInteractComponent::SetPlayer(AHorrorTemplateCharacter* Player)
 	}
 }
 
-void UInteractComponent::InteractCast(float ElapsedSeconds)
+bool UInteractComponent::InteractCast(float ElapsedSeconds)
 {
 	if (HitInteractable)
 	{
@@ -113,8 +113,9 @@ void UInteractComponent::InteractCast(float ElapsedSeconds)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, TEXT("Sphere Trace came back empty"));
 		}
-		
 	}
+
+	return HitInteractable;
 }
 
 void UInteractComponent::StopInteractCast()

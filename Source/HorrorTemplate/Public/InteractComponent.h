@@ -30,7 +30,7 @@ public:
 
 	void SetPlayer(AHorrorTemplateCharacter* Player);
 	
-	void InteractCast(float ElapsedSeconds);
+	bool InteractCast(float ElapsedSeconds);
 	void StopInteractCast();
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

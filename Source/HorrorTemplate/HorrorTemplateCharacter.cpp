@@ -164,7 +164,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::StartSprinting);
+		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::StartSprinting);
 		EnhancedInputComponent->BindAction(PlayerData->SprintAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::StopSprinting);
 
 		// Crouching
@@ -188,7 +188,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
 
-		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::EquipFlask);
+		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::EquipFlask);
 		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::UnEquipFlask);
 	}
 	else
@@ -420,7 +420,11 @@ void AHorrorTemplateCharacter::TimeLineFinished() const
 void AHorrorTemplateCharacter::StartSprinting()
 {
 	if (!EnablePlayerInput) return;
-	if (!CanSprint) return;
+	if (!CanSprint)
+	{
+		StopSprinting();
+		return;
+	}
 	
 	if (IsCrouching)
 		StopCrouching();
@@ -474,11 +478,19 @@ void AHorrorTemplateCharacter::OnLeanCompleted()
 
 void AHorrorTemplateCharacter::OnInteract(const FInputActionInstance& Instance)
 {
-	InteractComponent->InteractCast(Instance.GetElapsedTime());
+	if (InteractComponent->InteractCast(Instance.GetElapsedTime()))
+	{
+		IsInteracting = true;
+	}
+	else
+	{
+		IsInteracting = false;
+	}
 }
 
 void AHorrorTemplateCharacter::OnStopInteract()
 {
+	IsInteracting = false;
 	InteractComponent->StopInteractCast();
 }
 
@@ -515,9 +527,11 @@ void AHorrorTemplateCharacter::EquipFlaskBP_Implementation()
 
 void AHorrorTemplateCharacter::EquipFlask()
 {
+	if (IsInteracting) return;
+
 	CanSprint = false;
 	CanDrink = false;
-	EquipFlaskBP_Implementation();
+	EquipFlaskBP();
 }
 
 void AHorrorTemplateCharacter::UnEquipFlaskBP_Implementation()
@@ -526,9 +540,12 @@ void AHorrorTemplateCharacter::UnEquipFlaskBP_Implementation()
 
 void AHorrorTemplateCharacter::UnEquipFlask()
 {
+	if (IsInteracting) return;
+
+	
 	CanSprint = true;
 	CanDrink = true;
-	UnEquipFlaskBP_Implementation();
+	UnEquipFlaskBP();
 }
 
 /*float AHorrorTemplateCharacter::GetElapsedSeconds(UInputAction* action)

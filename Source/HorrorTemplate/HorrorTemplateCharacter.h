@@ -111,6 +111,9 @@ class AHorrorTemplateCharacter : public ACharacter
 
 	bool CanSprint;
 	bool CanDrink;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	bool IsInteracting;
 	
 public:
 	AHorrorTemplateCharacter();
