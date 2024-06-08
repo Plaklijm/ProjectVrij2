@@ -123,7 +123,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	TargetCameraLocation = DefaultCameraLocation;
 
 	CanSprint = true;
-	CanDrink = true;
+	CanDrink = false;
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -188,8 +188,7 @@ void AHorrorTemplateCharacter::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Triggered, this, &AHorrorTemplateCharacter::OnInteract);
 		EnhancedInputComponent->BindAction(PlayerData->InteractAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::OnStopInteract);
 
-		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::EquipFlask);
-		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Completed, this, &AHorrorTemplateCharacter::UnEquipFlask);
+		EnhancedInputComponent->BindAction(PlayerData->EquipFlaskAction, ETriggerEvent::Started, this, &AHorrorTemplateCharacter::FlaskLogic);
 	}
 	else
 	{
@@ -481,6 +480,7 @@ void AHorrorTemplateCharacter::OnInteract(const FInputActionInstance& Instance)
 	if (InteractComponent->InteractCast(Instance.GetElapsedTime()))
 	{
 		IsInteracting = true;
+		UnEquipFlask();
 	}
 	else
 	{
@@ -521,32 +521,42 @@ void AHorrorTemplateCharacter::ReplenishStamina()
 	}
 }
 
-void AHorrorTemplateCharacter::EquipFlaskBP_Implementation()
+void AHorrorTemplateCharacter::FlaskLogic()
 {
+	if (!HoldingFlask && !IsInteracting)
+	{
+		EquipFlask();
+	}
+	else
+	{
+		UnEquipFlask();
+	}
 }
 
 void AHorrorTemplateCharacter::EquipFlask()
 {
-	if (IsInteracting) return;
-
+	HoldingFlask = true;
 	CanSprint = false;
-	CanDrink = false;
+	CanDrink = true;
 	EquipFlaskBP();
+}
+
+void AHorrorTemplateCharacter::UnEquipFlask()
+{
+	HoldingFlask = false;
+	CanSprint = true;
+	CanDrink = false;
+	UnEquipFlaskBP();
+}
+
+void AHorrorTemplateCharacter::EquipFlaskBP_Implementation()
+{
 }
 
 void AHorrorTemplateCharacter::UnEquipFlaskBP_Implementation()
 {
 }
 
-void AHorrorTemplateCharacter::UnEquipFlask()
-{
-	if (IsInteracting) return;
-
-	
-	CanSprint = true;
-	CanDrink = true;
-	UnEquipFlaskBP();
-}
 
 /*float AHorrorTemplateCharacter::GetElapsedSeconds(UInputAction* action)
 {

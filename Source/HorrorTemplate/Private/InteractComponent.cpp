@@ -94,8 +94,6 @@ bool UInteractComponent::InteractCast(float ElapsedSeconds)
 
 		FHitResult HitResult;
 		
-		DrawDebugSweptSphere(GetWorld(), Start, End, 5, FColor::Purple, true);
-		
 		if (UKismetSystemLibrary::SphereTraceSingle(GetWorld(), Start, End, 5, UEngineTypes::ConvertToTraceType(ECC_Camera),
 			false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true))
 		{
