@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{d6f0da26-f01c-48d7-9d59-7cd56d2a6bc7}">
+		<property name="assetPath">
+			<value>Hit Body Impact Thud Bone Break-007.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.53900000000000003</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e917ee22-dc14-412b-810f-86972287131e}</destination>
+		</relationship>
+	</object>
+</objects>

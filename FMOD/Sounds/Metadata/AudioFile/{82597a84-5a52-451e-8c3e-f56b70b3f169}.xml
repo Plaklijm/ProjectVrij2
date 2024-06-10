@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{82597a84-5a52-451e-8c3e-f56b70b3f169}">
+		<property name="assetPath">
+			<value>Guts Gore Animal Beast Zombie Eat Flesh-010.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.7387812499999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e917ee22-dc14-412b-810f-86972287131e}</destination>
+		</relationship>
+	</object>
+</objects>
