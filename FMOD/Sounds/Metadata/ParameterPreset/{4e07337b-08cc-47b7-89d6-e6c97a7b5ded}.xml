@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{4e07337b-08cc-47b7-89d6-e6c97a7b5ded}">
+		<property name="name">
+			<value>Cave</value>
+		</property>
+		<relationship name="folder">
+			<destination>{aaef9df8-535f-42ec-b530-76ad7344b275}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{9e487c2d-69d1-4fd7-ba57-c25c7a8e1a5d}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{9e487c2d-69d1-4fd7-ba57-c25c7a8e1a5d}">
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+		<property name="seekSpeed">
+			<value>0.34000000357627869</value>
+		</property>
+	</object>
+</objects>
