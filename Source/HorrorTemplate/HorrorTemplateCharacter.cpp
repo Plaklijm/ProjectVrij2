@@ -118,6 +118,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	PlayerData->Stamina = PlayerData->MaxStamina;
 	CanReplenishStamina = true;
 	PlayerData->JuiceDiminishMultiplier = PlayerData->PassiveJuiceDiminishMultiplier;
+	PlayerData->WalkSpeed = PlayerData->WalkNormalSpeed;
 	
 	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
 	TargetCameraLocation = DefaultCameraLocation;
@@ -284,6 +285,7 @@ void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, TEXT("INSANE"));
 		FirstPersonCameraComponent->SetPostProcessBlendWeight(1);
 		PCI->SetScalarParameterValue(PlayerData->TreeScalarName, 1);
+		GardenerEvent(true);
 		break;
 	default:
 		break;
