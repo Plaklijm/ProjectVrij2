@@ -124,7 +124,6 @@ void AHorrorTemplateCharacter::BeginPlay()
 	TargetCameraLocation = DefaultCameraLocation;
 
 	CanSprint = true;
-	CanDrink = false;
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -219,8 +218,6 @@ void AHorrorTemplateCharacter::AddJuice(float amount)
 
 void AHorrorTemplateCharacter::DrinkJuice()
 {
-	if (!CanDrink) return;
-	
 	if (PlayerData->JuiceFlaskAmount > 0 && PlayerData->JuiceConsumedAmount < PlayerData->JuiceMaxConsumeAmount)
 	{
 		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
@@ -539,7 +536,6 @@ void AHorrorTemplateCharacter::EquipFlask()
 {
 	HoldingFlask = true;
 	CanSprint = false;
-	CanDrink = true;
 	EquipFlaskBP();
 }
 
@@ -547,7 +543,6 @@ void AHorrorTemplateCharacter::UnEquipFlask()
 {
 	HoldingFlask = false;
 	CanSprint = true;
-	CanDrink = false;
 	UnEquipFlaskBP();
 }
 
