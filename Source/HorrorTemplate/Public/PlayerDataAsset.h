@@ -49,8 +49,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
 	UInputAction* EquipFlaskAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
 	float WalkSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
+	float WalkInsaneSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
+	float WalkNormalSpeed;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
 	float SprintSpeed;

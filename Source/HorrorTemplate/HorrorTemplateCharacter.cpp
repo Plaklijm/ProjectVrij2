@@ -118,12 +118,12 @@ void AHorrorTemplateCharacter::BeginPlay()
 	PlayerData->Stamina = PlayerData->MaxStamina;
 	CanReplenishStamina = true;
 	PlayerData->JuiceDiminishMultiplier = PlayerData->PassiveJuiceDiminishMultiplier;
+	PlayerData->WalkSpeed = PlayerData->WalkNormalSpeed;
 	
 	DefaultCameraLocation = SpringArmComponent->GetRelativeLocation();
 	TargetCameraLocation = DefaultCameraLocation;
 
 	CanSprint = true;
-	CanDrink = false;
 
 	FOnTimelineFloat CrouchValue;
 	FOnTimelineEvent TimeLineFinishedEvent;
@@ -218,8 +218,6 @@ void AHorrorTemplateCharacter::AddJuice(float amount)
 
 void AHorrorTemplateCharacter::DrinkJuice()
 {
-	if (!CanDrink) return;
-	
 	if (PlayerData->JuiceFlaskAmount > 0 && PlayerData->JuiceConsumedAmount < PlayerData->JuiceMaxConsumeAmount)
 	{
 		const auto temp = GetWorld()->GetDeltaSeconds() * PlayerData->JuiceDrinkSpeedMultiplier;
@@ -284,6 +282,7 @@ void AHorrorTemplateCharacter::HandleInsanity(int JuiceState)
 		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, TEXT("INSANE"));
 		FirstPersonCameraComponent->SetPostProcessBlendWeight(1);
 		PCI->SetScalarParameterValue(PlayerData->TreeScalarName, 1);
+		GardenerEvent(true);
 		break;
 	default:
 		break;
@@ -537,7 +536,6 @@ void AHorrorTemplateCharacter::EquipFlask()
 {
 	HoldingFlask = true;
 	CanSprint = false;
-	CanDrink = true;
 	EquipFlaskBP();
 }
 
@@ -545,7 +543,6 @@ void AHorrorTemplateCharacter::UnEquipFlask()
 {
 	HoldingFlask = false;
 	CanSprint = true;
-	CanDrink = false;
 	UnEquipFlaskBP();
 }
 
