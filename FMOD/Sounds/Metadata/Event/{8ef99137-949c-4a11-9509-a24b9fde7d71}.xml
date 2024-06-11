@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{8ef99137-949c-4a11-9509-a24b9fde7d71}">
 		<property name="name">
-			<value>gardener_chanting</value>
+			<value>gardener_chanting_loop</value>
 		</property>
 		<property name="outputFormat">
 			<value>5</value>
