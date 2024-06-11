@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{1f251789-21d1-4712-9785-04eaca73de5b}">
+		<property name="name">
+			<value>LoriumLevel</value>
+		</property>
+		<relationship name="folder">
+			<destination>{aaef9df8-535f-42ec-b530-76ad7344b275}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{c0e6d27f-533a-4b16-8444-0a3f5ad59d3d}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{c0e6d27f-533a-4b16-8444-0a3f5ad59d3d}">
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>
