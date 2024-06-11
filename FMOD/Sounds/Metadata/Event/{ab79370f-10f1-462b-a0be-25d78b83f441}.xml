@@ -121,6 +121,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{aae5b776-af99-416c-8a41-9459cb53752f}">
+		<property name="volume">
+			<value>-3.5</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{088d58ab-c5c3-4d14-a286-97f99cc3c36d}</destination>
 		</relationship>
@@ -146,6 +149,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{d0919a9c-eded-4b79-a76c-75e85810dc92}">
+		<property name="volume">
+			<value>-1</value>
+		</property>
 		<property name="name">
 			<value>Music</value>
 		</property>

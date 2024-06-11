@@ -112,7 +112,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{7de34071-55fa-49ef-a01c-c2518b4ead52}">
 		<property name="volume">
-			<value>-7</value>
+			<value>-14.5</value>
 		</property>
 		<property name="name">
 			<value>Audio 1</value>
@@ -147,7 +147,7 @@
 			<value>volume</value>
 		</property>
 		<property name="amount">
-			<value>9</value>
+			<value>2.5</value>
 		</property>
 	</object>
 	<object class="FadeCurve" id="{a87ca169-72ae-45f2-baa6-bd3d250c9bdb}">
