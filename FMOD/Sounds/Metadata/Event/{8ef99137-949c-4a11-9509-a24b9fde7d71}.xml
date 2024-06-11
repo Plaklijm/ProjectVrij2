@@ -104,8 +104,11 @@
 		<property name="maximumTimeBetweenSounds">
 			<value>5000</value>
 		</property>
+		<property name="minimumScatterDistance">
+			<value>0</value>
+		</property>
 		<property name="maximumScatterDistance">
-			<value>1</value>
+			<value>0.300000012</value>
 		</property>
 		<property name="pitchRandomization">
 			<value>2.9000001</value>
