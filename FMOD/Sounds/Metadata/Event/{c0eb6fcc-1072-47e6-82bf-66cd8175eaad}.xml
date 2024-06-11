@@ -5,7 +5,7 @@
 			<value>player_footsteps</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{f9b313db-f7c0-4fb6-8a49-5db32b8e9d5a}</destination>
@@ -118,7 +118,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{9bfaabb2-cb19-4382-a889-faa79233d558}">
 		<property name="volume">
-			<value>-8.5</value>
+			<value>-24</value>
 		</property>
 		<property name="name">
 			<value>Audio 1</value>
@@ -195,6 +195,7 @@
 	<object class="MixerBusEffectChain" id="{91316162-2800-4b6a-b72b-52ed6cdc2898}">
 		<relationship name="effects">
 			<destination>{4fa9919c-4a01-45c6-afcb-22d58bdc177d}</destination>
+			<destination>{558d4ea3-0034-42ee-a3e0-949f4a613a2d}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{bfdb16ce-6874-445d-90b8-f9aea95428f7}" />
@@ -219,4 +220,5 @@
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{4fa9919c-4a01-45c6-afcb-22d58bdc177d}" />
+	<object class="SpatialiserEffect" id="{558d4ea3-0034-42ee-a3e0-949f4a613a2d}" />
 </objects>
