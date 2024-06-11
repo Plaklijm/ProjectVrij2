@@ -30,10 +30,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input|Actions", meta=(AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input|Actions", meta=(AllowPrivateAccess = "true"))
-	UInputAction* InteractAndLeanRightAction;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input|Actions", meta=(AllowPrivateAccess = "true"))
 	UInputAction* DrinkAction;
 	
@@ -43,14 +40,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
 	UInputAction* LeanLeftAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
-	UInputAction* AttackAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
-	UInputAction* EquipTap;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input|Actions", meta=(AllowPrivateAccess = "true"))
+	UInputAction* LeanRightAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
-	UInputAction* EquipFlask;
+	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input|Actions", meta = (AllowPrivateAccess = "true"))
+	UInputAction* EquipFlaskAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement|Speed", meta=(AllowPrivateAccess = "true"))
 	float WalkSpeed;
