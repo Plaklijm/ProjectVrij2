@@ -1,3 +1,4 @@
 Content/BlackAlder/Textures/** filter=lfs diff=lfs merge=lfs -text
 Content/Primitive_Characters_Pack/Textures/** filter=lfs diff=lfs merge=lfs -text
+Content/Maps/ROO/church.uasset filter=lfs diff=lfs merge=lfs -text
 Content/FirstPerson/FirstPersonArms/T_Primitive_Character_Set_01_Normals.uasset filter=lfs diff=lfs merge=lfs -text
