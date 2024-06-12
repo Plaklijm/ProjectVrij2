@@ -141,6 +141,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{f1c7a4c3-061b-44c8-862b-d9c5437c75a1}">
+		<property name="volume">
+			<value>6.5</value>
+		</property>
 		<property name="name">
 			<value>Player Heave...</value>
 		</property>
@@ -174,6 +177,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{ad8872d6-4a9f-4315-86d4-e8485cf37c23}">
+		<property name="volume">
+			<value>6</value>
+		</property>
 		<property name="name">
 			<value>Player ...Ho</value>
 		</property>
