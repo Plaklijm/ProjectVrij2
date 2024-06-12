@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{160a1d94-2c81-4de3-960d-c4c1cca922cd}">
+		<property name="assetPath">
+			<value>DSGNImpt_Rising Thunder, Low Hit With Gravel, Bell_Ocular Sounds_Epic Hits Vol 2_The Complete Impacts Collection.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>9.3422083333333337</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{e917ee22-dc14-412b-810f-86972287131e}</destination>
+		</relationship>
+	</object>
+</objects>
