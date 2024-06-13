@@ -112,7 +112,7 @@ void AHorrorTemplateCharacter::BeginPlay()
 	FootstepInterval = PlayerData->WalkFootstepInterval;
 
 	CMC->MaxWalkSpeed = PlayerData->WalkSpeed;
-	PlayerData->JuiceFlaskAmount = 0;
+	PlayerData->JuiceFlaskAmount = 10;
 	PlayerData->JuiceConsumedAmount = PlayerData->JuiceMaxConsumeAmount;
 	PlayerData->CollectedCores.Empty();
 	PlayerData->Stamina = PlayerData->MaxStamina;
