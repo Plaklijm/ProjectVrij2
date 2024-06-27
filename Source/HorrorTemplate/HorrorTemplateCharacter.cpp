@@ -389,6 +389,7 @@ void AHorrorTemplateCharacter::StopCrouching()
 	if (GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat(), ECC_Visibility,
 		FCollisionShape::MakeSphere(GetCapsuleComponent()->GetScaledCapsuleRadius())))
 	{
+		IsCrouching = true;
 		return;
 	}
 	
@@ -424,8 +425,8 @@ void AHorrorTemplateCharacter::StartSprinting()
 		return;
 	}
 	
-	if (IsCrouching)
-		StopCrouching();
+	/*if (IsCrouching)
+		StopCrouching();*/
 	if (PlayerData->Stamina <= 0)
 	{
 		StopSprinting();
